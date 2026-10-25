@@ -61,6 +61,10 @@ loads them instead of the originals. Your game files are never changed. See [`MO
 | `NFSMWStaging/ModTool` | The texture/model export and import tool |
 | `NFSMW_RE` | Reverse-engineering notes: per-system specs with exe addresses, and the code coverage report |
 
+## Credits
+
+- **Team Vanilla** — thank you for your help with this project and the GitHub repository.
+
 ## Legal
 
 This is a non-commercial fan project for preservation and study. It is not affiliated with or endorsed by Electronic

@@ -63,7 +63,7 @@ loads them instead of the originals. Your game files are never changed. See [`MO
 
 ## Credits
 
-- **Team Vanilla** — thank you for your help with this project and the GitHub repository.
+- **TeamVanilla** — thank you for your help with this project and the GitHub repository.
 
 ## Legal
 

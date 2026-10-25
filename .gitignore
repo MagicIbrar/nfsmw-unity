@@ -1,0 +1,64 @@
+# Whitelist: only our own code and docs are published. The game's files, anything exported from them, builds,
+# third-party references and local tool output stay out. Everything not re-included below is ignored.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/LICENSE
+!/MODDING.md
+!/docs/
+!/NFSMWUnity/
+!/NFSMWStaging/
+!/NFSMW_RE/
+
+# ---- Unity project: sources, packages and settings only
+/NFSMWUnity/*
+!/NFSMWUnity/Assets/
+!/NFSMWUnity/Packages/
+!/NFSMWUnity/ProjectSettings/
+!/NFSMWUnity/README.md
+!/NFSMWUnity/batch.sh
+!/NFSMWUnity/check.sh
+!/NFSMWUnity/runtests.sh
+/NFSMWUnity/Assets/InitTestScene*
+
+# ---- tools: sources only
+/NFSMWStaging/**/bin/
+/NFSMWStaging/**/obj/
+/NFSMWStaging/**/*.txt
+
+# ---- reverse-engineering notes: specs, coverage, scripts only (no decompiler output, no game data or dumps)
+/NFSMW_RE/*
+!/NFSMW_RE/specs/
+!/NFSMW_RE/coverage/
+!/NFSMW_RE/tools/
+!/NFSMW_RE/REPORT.md
+/NFSMW_RE/tools/**/__pycache__/
+/NFSMW_RE/tools/**/bin/
+/NFSMW_RE/tools/**/obj/
+
+# ---- never: game files, exports, mods, local settings, archives
+Mods/
+gameroot.txt
+*.rar
+*.zip
+*.7z
+*.exe
+*.dll
+*.bin
+*.BIN
+*.bun
+*.BUN
+*.lzc
+*.LZC
+*.big
+*.BIG
+*.mus
+*.vp6
+*.abk
+*.fng
+*.tpk
+*.obj
+*.mtl
+*.wav
+*.pyc

@@ -1,0 +1,9 @@
+{
+    "name": "NFSMW.Tests",
+    "rootNamespace": "NfsMw.Tests",
+    "references": ["NFSMW.Runtime"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "autoReferenced": false,
+    "optionalUnityReferences": ["TestAssemblies"]
+}

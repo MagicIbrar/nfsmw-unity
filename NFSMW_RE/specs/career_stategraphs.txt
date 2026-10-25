@@ -1,0 +1,2633 @@
+== stategraph_basicrace_done_handler_stateenter_2 owner=16_2_1_d_day_intro msg=5E1AA4C2 trans= #165
+      2: Game.JumpToCarLot()
+      3: return 
+== stategraph_basicrace_countdown_handler_stateexit owner=basicrace msg=9C020C14 trans= #284
+      4: Audio.SetFlag('eNIS_321GO', false)
+      6: test r0.RollingStart ~= 0 -> skip ; r3=r0.RollingStart
+      7: jmp 16
+      11: Game.ClearAIControl(0)
+      15: Game.ClearAIControl(1)
+      17: test r0.RollingStart ~= 1 -> skip ; r3=r0.RollingStart
+      18: jmp 23
+      22: Game.SetAllStaging(false)
+      23: return 
+== stategraph_basicrace_done_handler_stateenter owner=basicrace msg=5E1AA4C2 trans= #457
+      3: Game.DoSpecialFinalization(r0)
+      6: RaceStatus:DisableBarriers()
+      9: RaceStatus:EnableBinBarriers()
+      11: test r2.Abandoned ~= 0 -> skip ; r3=r2.Abandoned
+      12: jmp 21
+      15: RaceStatus:SetRoaming()
+      19: Debug.Print('race abandoned')
+      20: return 
+      22: r2['RunningPostRace'] = false
+      24: test r2.CareerRace ~= 0 -> skip ; r3=r2.CareerRace
+      25: jmp 39
+      27: if (r0.PostRaceActivity == None) ~= 1 then skip
+      28: jmp 39
+      30: r2['RunningPostRace'] = true
+      34: Debug.Print('launching post race activity')
+      38: Activity.Run(r0.PostRaceActivity)
+      40: test r2.RunningPostRace ~= 1 -> skip ; r3=r2.RunningPostRace
+      41: jmp 45
+      44: RaceStatus:SetRoaming()
+      45: return 
+== stategraph_basicrace_initial_handler_loadingcomplete owner=basicrace msg=319915CD trans= #135
+      0: return 
+      1: return 
+== stategraph_basicrace_intro_message_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_intromovie,stategraph_basicrace_intronis #436
+      1: if (r0.IntroMessageID == -1) ~= 1 then skip
+      2: jmp 7
+      5: EShowMessageScreen(r0.IntroMessageID)
+      6: return 
+      8: test r0.IntroNIS ~= 0 -> skip ; r3=r0.IntroNIS
+      9: jmp 15
+      11: if (r0.IntroNIS == '') ~= 0 then skip
+      12: jmp 14
+      16: test r0.IntroMovie ~= 0 -> skip ; r4=r0.IntroMovie
+      17: jmp 23
+      19: if (r0.IntroMovie == '') ~= 0 then skip
+      20: jmp 22
+      24: test r0.BossRace ~= 0 -> skip ; r5=r0.BossRace
+      25: jmp 41
+      28: r5 = Game.IsCareerMode()
+      30: if (Game.IsCareerMode() == false) ~= 0 then skip
+      31: jmp 41
+      33: test r0.QuickRaceNIS ~= 0 -> skip ; r3=r0.QuickRaceNIS
+      34: jmp 40
+      36: if (r0.QuickRaceNIS == '') ~= 0 then skip
+      37: jmp 39
+      43: r5 = Game.IsCareerMode()
+      45: if (Game.IsCareerMode() == false) ~= 0 then skip
+      46: jmp 48
+      48: test false ~= 0 -> skip ; r4=false
+      49: jmp 56
+      50: test true ~= 1 -> skip ; r3=true
+      51: jmp 56
+      54: ChangeState('intromovie')
+      55: return 
+      58: ChangeState('intronis')
+      59: return 
+== stategraph_basicrace_intromovie_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_intronis #238
+      1: test r0.IntroMovie ~= 0 -> skip ; r3=r0.IntroMovie
+      2: jmp 8
+      4: if (r0.IntroMovie == '') ~= 0 then skip
+      5: jmp 7
+      8: test true ~= 0 -> skip ; r3=true
+      9: jmp 13
+      12: EPlayRaceMovie(r0.IntroMovie)
+      13: test true ~= 1 -> skip ; r3=true
+      14: jmp 18
+      17: ChangeState('intronis')
+      18: return 
+== stategraph_basicrace_intromovie_handler_notifymoviefinished owner=basicrace msg=89BB36FE trans=stategraph_basicrace_intronis #175
+      2: ChangeState('intronis')
+      3: return 
+== stategraph_basicrace_initial_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_tutorial #563
+      2: r3 = Game.IsCareerMode()
+      3: r2['CareerRace'] = Game.IsCareerMode()
+      5: test r2.CareerRace ~= 0 -> skip ; r3=r2.CareerRace
+      6: jmp 18
+      10: r3 = Game.SetCurrentTimeOfDay(r0)
+      11: test Game.SetCurrentTimeOfDay(r0) ~= 0 -> skip ; r3=Game.SetCurrentTimeOfDay(r0)
+      12: jmp 18
+      16: Game.ReloadWorld(r0)
+      17: return 
+      21: r3 = Game.DoSpecialSetup(r0)
+      22: test Game.DoSpecialSetup(r0) ~= 0 -> skip ; r3=Game.DoSpecialSetup(r0)
+      23: jmp 29
+      27: Game.ReloadWorld(r0)
+      28: return 
+      32: Game.SetCopsEnabled(r0.CopsInRace)
+      36: Game.SetChanceOfRain(r0.ChanceOfRain)
+      39: RaceStatus:ClearRacers()
+      43: Game.SetRaceActivity(r0)
+      47: Game.InitRacers(r0.racestart)
+      50: r4 = Game.GetNumRacers()
+      51: r2['NumRacers'] = Game.GetNumRacers()
+      53: r2['PlayerBusted'] = false
+      57: RaceStatus:SetHasBeenWon(false)
+      59: r2['Abandoned'] = false
+      62: ChangeState('tutorial')
+      63: return 
+== stategraph_basicrace_intro_message_handler_notifymessagedone owner=basicrace msg=52584CC7 trans=stategraph_basicrace_intromovie,stategraph_basicrace_intronis #370
+      1: test r0.IntroNIS ~= 0 -> skip ; r3=r0.IntroNIS
+      2: jmp 8
+      4: if (r0.IntroNIS == '') ~= 0 then skip
+      5: jmp 7
+      9: test r0.IntroMovie ~= 0 -> skip ; r4=r0.IntroMovie
+      10: jmp 16
+      12: if (r0.IntroMovie == '') ~= 0 then skip
+      13: jmp 15
+      17: test r0.BossRace ~= 0 -> skip ; r5=r0.BossRace
+      18: jmp 34
+      21: r5 = Game.IsCareerMode()
+      23: if (Game.IsCareerMode() == false) ~= 0 then skip
+      24: jmp 34
+      26: test r0.QuickRaceNIS ~= 0 -> skip ; r3=r0.QuickRaceNIS
+      27: jmp 33
+      29: if (r0.QuickRaceNIS == '') ~= 0 then skip
+      30: jmp 32
+      34: test false ~= 0 -> skip ; r4=false
+      35: jmp 42
+      36: test true ~= 1 -> skip ; r3=true
+      37: jmp 42
+      40: ChangeState('intromovie')
+      41: return 
+      44: ChangeState('intronis')
+      45: return 
+== stategraph_pursuit_mini_game_initial_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans=stategraph_pursuit_mini_game_racing #530
+      2: if (r0.TimeLimit == 90) ~= 0 then skip
+      3: jmp 5
+      6: if (r0.TimeLimit == 120) ~= 0 then skip
+      7: jmp 9
+      10: test r0.CopSpawnPoints ~= 0 -> skip ; r4=r0.CopSpawnPoints
+      11: jmp 28
+      18: jmp 27
+      26: Game.SpawnCop(r0.CopSpawnPoints[(1 - 1)], r0.CopSpawnType, true, false)
+      27: FORLOOP A=5 B=255 C=502
+      31: Game.SetCopsEnabled(true)
+      35: Game.ForcePursuitStart(r0.ForceHeatLevel)
+      38: r4 = Game.GetSimTime()
+      41: r2['SurvivalTime'] = (Game.GetSimTime() + r0.TimeLimit)
+      44: ChangeState('racing')
+      45: return 
+== stategraph_pursuit_mini_game_outronis_handler_niscomplete owner=pursuit_mini_game msg=6638715C trans=stategraph_pursuit_mini_game_done #168
+      2: ChangeState('done')
+      3: return 
+== stategraph_pursuit_mini_game_outronis_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #198
+      8: NIS.Play(nil, r0.OutroNIS, 'Outro', 0, '', '')
+      9: return 
+== stategraph_pursuit_mini_game_escaped_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #318
+      2: r3 = Game.GetSimTime()
+      4: r2['PostPursuitTime'] = (Game.GetSimTime() + 2)
+      8: HUD.ShowMessage('LANGUAGE_HUD_COPS_SUCCESSFULLY_EVADED')
+      12: Demo.SetRaceCompleteForFE(r0.RestartActivity)
+      13: return 
+== stategraph_basicrace_countdown_handler_notifyraceabandoned owner=basicrace msg=C1E81A41 trans=stategraph_basicrace_abandoned #173
+      2: ChangeState('abandoned')
+      3: return 
+== stategraph_basicrace_countdown_handler_countdowndone owner=basicrace msg=D98FA287 trans=stategraph_basicrace_racing #201
+      2: Game.NotifyCountdownDone()
+      5: ChangeState('racing')
+      6: return 
+== stategraph_basicrace_countdown_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_racing #373
+      4: Audio.SetFlag('eNIS_321GO', true)
+      6: test r0.RollingStart ~= 0 -> skip ; r3=r0.RollingStart
+      7: jmp 16
+      11: Game.ForceAIControl(0)
+      15: Game.ForceAIControl(1)
+      17: test r0.DoCountdown ~= 0 -> skip ; r3=r0.DoCountdown
+      18: jmp 26
+      22: Game.SetAllStaging(true)
+      24: EShowRaceCountdown()
+      25: return 
+      28: Game.NotifyCountdownDone()
+      31: ChangeState('racing')
+      32: return 
+== stategraph_basicrace_countdown_handler_restartrace owner=basicrace msg=6CE66AA0 trans=stategraph_basicrace_prerace #204
+      3: RaceStatus:SetActivelyRacing(false)
+      6: ChangeState('prerace')
+      7: return 
+== stategraph_basicrace_abandoned_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_done #270
+      1: r2['Abandoned'] = true
+      5: RaceStatus:SetActivelyRacing(false)
+      9: Game.SetCopsEnabled(true)
+      12: Game.AbandonRace()
+      15: ChangeState('done')
+      16: return 
+== stategraph_basicrace_abandoned_handler_stateenter_2 owner=race_bin_09/9_7_1_drag msg=5E1AA4C2 trans= #198
+      3: Game.WarpToMarkerWhenRoaming(r0.abandon_respawn_marker)
+      4: return 
+== stategraph_basicrace_prerace_handler_stateenter owner=basicrace msg=5E1AA4C2 trans= #1224
+      2: Game.ResetCopsForRestart()
+      6: Game.SetCopsEnabled(r0.CopsInRace)
+      10: Game.SetChanceOfRain(r0.ChanceOfRain)
+      14: Debug.Print('Pre-race setup')
+      16: r2['NextGoal'] = {}
+      18: r2['GoalCount'] = {}
+      20: r2['GoalList'] = {}
+      22: r2['LapsLeft'] = {}
+      24: r2['InRace'] = {}
+      26: r2['Element'] = {}
+      28: r2['Character'] = {}
+      29: r2['NumAutoSpawned'] = 0
+      31: r2['AutoSpawnedTriggers'] = {}
+      36: jmp 107
+      39: r2.GoalList[(1 - 1)] = r0.Checkpoint
+      44: r7 = Game.GetRacerCharacter((1 - 1))
+      45: r2.Character[(1 - 1)] = Game.GetRacerCharacter((1 - 1))
+      48: if (r2.Character[(1 - 1)] == None) ~= 1 then skip
+      49: jmp 67
+      53: if (r2.Character[(1 - 1)].CannedPath == None) ~= 1 then skip
+      54: jmp 67
+      61: Debug.Print('Racer '..(1 - 1)..' using canned path')
+      66: r2.GoalList[(1 - 1)] = r2.Character[(1 - 1)].CannedPath
+      68: r2.GoalCount[(1 - 1)] = 0
+      71: if (r2.GoalList[(1 - 1)] == None) ~= 1 then skip
+      72: jmp 78
+      77: r2.GoalCount[(1 - 1)] = r2.GoalList[(1 - 1)].Count
+      82: if (0 < r2.GoalCount[(1 - 1)]) ~= 0 then skip
+      83: jmp 88
+      89: r2.NextGoal[(1 - 1)] = 1
+      92: r2.LapsLeft[(1 - 1)] = r0.NumLaps
+      95: r2.InRace[(1 - 1)] = true
+      100: r9 = Game.GetRacerElement((1 - 1))
+      101: r2.Element[(1 - 1)] = Game.GetRacerElement((1 - 1))
+      106: Game.SetRacerGoal((1 - 1), r2.GoalList[(1 - 1)][1])
+      107: FORLOOP A=3 B=255 C=440
+      108: r2['NumberFinished'] = 0
+      110: r2['NumAllowedForLaps'] = {}
+      115: r2.NumAllowedForLaps[r0.NumLaps] = (r2.NumRacers + 1)
+      121: jmp 135
+      128: r2.NumAllowedForLaps[((r0.NumLaps - 1) - -1)] = (r2.NumAllowedForLaps[(((r0.NumLaps - 1) - -1) + 1)] - r0.KnockoutsPerLap)
+      131: if (r2.NumAllowedForLaps[((r0.NumLaps - 1) - -1)] < 1) ~= 0 then skip
+      132: jmp 135
+      134: r2.NumAllowedForLaps[((r0.NumLaps - 1) - -1)] = 1
+      135: FORLOOP A=3 B=255 C=497
+      136: r2['NumCheckpoints'] = 0
+      138: if (r0.Checkpoint == None) ~= 1 then skip
+      139: jmp 143
+      142: r2['NumCheckpoints'] = r0.Checkpoint.Count
+      145: RaceStatus:ClearCheckpoints()
+      150: jmp 156
+      155: RaceStatus:AddCheckpoint(r0.Checkpoint[(1 - 1)])
+      156: FORLOOP A=3 B=255 C=505
+      160: RaceStatus:AddCheckpoint(r0.racefinish)
+      163: r3 = Game.IsOnlineGame()
+      164: test Game.IsOnlineGame() ~= 1 -> skip ; r3=Game.IsOnlineGame()
+      165: jmp 169
+      168: r3 = Game.IsLANGame()
+      169: r2['OnlineRace'] = Game.IsLANGame()
+      171: test r2.CameFromNIS ~= 1 -> skip ; r3=r2.CameFromNIS
+      172: jmp 177
+      176: Game.WarpPlayerToTrigger(r0.racestart)
+      179: Game.RestoreStartPositions()
+      181: r2['CameFromNIS'] = false
+      184: RaceStatus:NotifyScriptWhenLoaded()
+      185: return 
+== stategraph_basicrace_prerace_handler_loadingcomplete owner=basicrace msg=319915CD trans=stategraph_basicrace_countdown,stategraph_basicrace_racing #302
+      2: Game.RestoreStartPositions()
+      6: Game.StartRace(r0)
+      10: RaceStatus:SetActivelyRacing(true)
+      12: test r0.DoCountdown ~= 0 -> skip ; r3=r0.DoCountdown
+      13: jmp 18
+      16: ChangeState('countdown')
+      17: return 
+      20: ChangeState('racing')
+      21: return 
+== stategraph_basicrace_prerace_handler_stateenter_11 owner=16_2_1_d_day_intro msg=5E1AA4C2 trans= #152
+      1: r2['DoMiaSMS'] = true
+      2: return 
+== stategraph_basicrace_prerace_handler_stateenter_10 owner=16_1_0_partial_dday msg=5E1AA4C2 trans= #196
+      1: r2['DoMiaCellCall'] = true
+      5: Game.KillTimer('killrace')
+      6: return 
+== stategraph_basicrace_postrace_handler_stateenter owner=basicrace msg=5E1AA4C2 trans= #248
+      1: test r2.OnlinePostRaceShown ~= 1 -> skip ; r3=r2.OnlinePostRaceShown
+      2: jmp 8
+      5: Game.EnterPostRaceFlow()
+      7: r2['OnlinePostRaceShown'] = true
+      12: Audio.SetFlag('eFE_PostRaceScreen', true)
+      13: return 
+== stategraph_basicrace_postrace_handler_restartrace owner=basicrace msg=6CE66AA0 trans=stategraph_basicrace_prerace #161
+      2: ChangeState('prerace')
+      3: return 
+== stategraph_basicrace_postrace_handler_stateexit owner=basicrace msg=9C020C14 trans= #184
+      4: Audio.SetFlag('eFE_PostRaceScreen', false)
+      5: return 
+== stategraph_basicrace_postrace_handler_stateenter_2 owner=16_2_1_d_day_intro msg=5E1AA4C2 trans= #131
+      0: return 
+== stategraph_basicrace_prerace_handler_stateenter_12 owner=race_bin_01/epic_pursuit msg=5E1AA4C2 trans= #336
+      2: r3 = Game.GetSimTime()
+      3: r2['RaceStartTime'] = Game.GetSimTime()
+      5: r2['DoneCrossCall'] = false
+      7: r2['DoneMiaCall'] = false
+      11: Game.HideTriggerIcon(r0.barrier_area)
+      15: Game.ShowGPS(false)
+      19: ENISWolrdGeometry('SCENERY_GROUP_DOOR', 1)
+      20: return 
+== stategraph_basicrace_prerace_handler_stateenter_4 owner=speedtraprace msg=5E1AA4C2 trans= #386
+      1: r2['SuddenDeathMode'] = false
+      2: r2['SuddenDeathPenalty'] = 0
+      3: r2['NumTraps'] = 0
+      5: if (r0.SpeedTrapList == None) ~= 1 then skip
+      6: jmp 10
+      9: r2['NumTraps'] = r0.SpeedTrapList.Count
+      14: jmp 20
+      19: Game.ShowTriggerIcon(r0.SpeedTrapList[(1 - 1)])
+      20: FORLOOP A=3 B=255 C=505
+      22: r2['TrapRecords'] = {}
+      27: jmp 40
+      30: r2.TrapRecords[(1 - 1)] = {}
+      35: jmp 39
+      38: r2.TrapRecords[(1 - 1)][(1 - 1)] = 0
+      39: FORLOOP A=6 B=255 C=507
+      40: FORLOOP A=3 B=255 C=498
+      41: return 
+== stategraph_basicrace_prerace_handler_stateenter_3 owner=race_bin_opm/20_8_1_escape_the_cops msg=5E1AA4C2 trans= #250
+      6: Game.SpawnCop(r0.cop_spawn_1, 'copmidsize', true, false)
+      13: Game.SpawnCop(r0.cop_spawn_2, 'copmidsize', true, false)
+      20: Game.SpawnCop(r0.cop_spawn_3, 'copmidsize', true, false)
+      21: return 
+== stategraph_basicrace_prerace_handler_stateenter_6 owner=race_bin_opm/20_2_1_rival_race msg=5E1AA4C2 trans= #156
+      1: r2['EnableCameraThing'] = true
+      2: return 
+== stategraph_basicrace_prerace_handler_stateenter_5 owner=tollboothrace msg=5E1AA4C2 trans= #180
+      0: r2['TerminateRaceTime'] = 0
+      2: r2['EnableCinematic'] = true
+      3: return 
+== stategraph_basicrace_prerace_handler_stateenter_2 owner=cashgrab msg=5E1AA4C2 trans= #356
+      0: r2['NumCashBags'] = 0
+      2: r2['CashAvailable'] = {}
+      4: r2['RacerCashTotal'] = {}
+      6: r2['SuddenDeath'] = false
+      8: if (r0.CashRewards == None) ~= 1 then skip
+      9: jmp 27
+      12: r2['NumCashBags'] = r0.CashRewards.Count
+      17: jmp 26
+      20: r2.CashAvailable[(1 - 1)] = true
+      25: Game.ResetTrigger(r0.CashRewards[(1 - 1)])
+      26: FORLOOP A=3 B=255 C=502
+      31: jmp 34
+      33: r2.RacerCashTotal[(1 - 1)] = 0
+      34: FORLOOP A=3 B=255 C=508
+      35: return 
+== stategraph_basicrace_prerace_handler_stateenter_14 owner=race_bin_09/9_7_1_drag msg=5E1AA4C2 trans= #132
+      0: return 
+== stategraph_basicrace_prerace_handler_stateenter_13 owner=basicrace msg=5E1AA4C2 trans= #430
+      1: r2['RandomSpawnTrafficChars'] = {}
+      2: r2['NumRandomTraffic'] = 0
+      3: r2['NextRandomSpawnIndex'] = 1
+      5: r2['OnlinePostRaceShown'] = false
+      7: test r0.RandomSpawnTriggers ~= 0 -> skip ; r3=r0.RandomSpawnTriggers
+      8: jmp 37
+      11: r2['NumRandomTraffic'] = r0.RandomSpawnTriggers.Count
+      16: jmp 22
+      21: r2.RandomSpawnTrafficChars[(1 - 1)] = r0.RandomSpawnTriggers[(1 - 1)].TrafficCharacter
+      22: FORLOOP A=3 B=255 C=505
+      25: r3 = Game.IsOnlineGame()
+      26: test Game.IsOnlineGame() ~= 1 -> skip ; r3=Game.IsOnlineGame()
+      27: jmp 31
+      30: r3 = Game.IsLANGame()
+      31: test Game.IsLANGame() ~= 1 -> skip ; r3=Game.IsLANGame()
+      32: jmp 37
+      36: Table.Randomize(r2.RandomSpawnTrafficChars)
+      37: return 
+== stategraph_basicrace_prerace_handler_stateenter_16 owner=race_bin_01/1_7_3_drag msg=5E1AA4C2 trans= #132
+      0: return 
+== stategraph_basicrace_prerace_handler_stateenter_15 owner=race_bin_04/4_7_4_drag msg=5E1AA4C2 trans= #132
+      0: return 
+== stategraph_basicrace_onlineover_handler_stateexit owner=basicrace msg=9C020C14 trans= #132
+      0: return 
+== stategraph_basicrace_onlineover_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_raceover #217
+      1: r2['ShowTips'] = false
+      3: r2['ShowPauseMenu'] = false
+      5: r2['ShowPostRace'] = true
+      8: ChangeState('raceover')
+      9: return 
+== stategraph_basicrace_outro_message_handler_notifymessagedone owner=basicrace msg=52584CC7 trans=stategraph_basicrace_outromovie #175
+      2: ChangeState('outromovie')
+      3: return 
+== stategraph_basicrace_intronis_handler_niscomplete_2 owner=nis_shell msg=6638715C trans=stategraph_basicrace_outronis #188
+      1: test r0.NISShell ~= 0 -> skip ; r3=r0.NISShell
+      2: jmp 6
+      5: ChangeState('outronis')
+      6: return 
+== stategraph_basicrace_intronis_handler_niscomplete owner=basicrace msg=6638715C trans=stategraph_basicrace_prerace #185
+      1: test r0.NISShell ~= 1 -> skip ; r3=r0.NISShell
+      2: jmp 6
+      5: ChangeState('prerace')
+      6: return 
+== stategraph_basicrace_intronis_handler_stateexit owner=basicrace msg=9C020C14 trans= #229
+      4: Audio.SetFlag('eNIS_Start', false)
+      7: Game.SaveStartPositions()
+      9: r2['CameFromNIS'] = true
+      10: return 
+== stategraph_basicrace_intronis_handler_stateenter owner=basicrace msg=5E1AA4C2 trans= #471
+      4: Audio.SetFlag('eNIS_Start', true)
+      6: EResetProps()
+      11: if (r0.BossRace == true) ~= 0 then skip
+      12: jmp 20
+      15: r5 = Game.IsCareerMode()
+      16: test Game.IsCareerMode() ~= 1 -> skip ; r5=Game.IsCareerMode()
+      17: jmp 20
+      23: Game.SetPlayerStartPosition(r0.racestart)
+      32: NIS.Play(r0.racestart, r0.QuickRaceNIS, 'Intro', r0.IntroCameraTrack, '', '')
+      33: if (r0.QuickRaceNIS == None) ~= 1 then skip
+      34: jmp 43
+      35: if (r0.QuickRaceNIS == '') ~= 1 then skip
+      36: jmp 43
+      39: r5 = Game.IsSplitScreen()
+      41: if (Game.IsSplitScreen() == true) ~= 0 then skip
+      42: jmp 47
+      46: Game.WarpPlayerToTrigger(r0.racestart)
+      47: return 
+== stategraph_basicrace_outro_message_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_outromovie #229
+      1: if (r0.OutroMessageID == -1) ~= 1 then skip
+      2: jmp 7
+      5: EShowMessageScreen(r0.OutroMessageID)
+      6: return 
+      9: ChangeState('outromovie')
+      10: return 
+== stategraph_basicrace_outronis_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_outro_message #328
+      1: test r0.OutroNIS ~= 0 -> skip ; r3=r0.OutroNIS
+      2: jmp 21
+      4: test r0.OutroNISMarker ~= 0 -> skip ; r3=r0.OutroNISMarker
+      5: jmp 21
+      14: NIS.Play(r0.OutroNISMarker, r0.OutroNIS, 'Outro', r0.OutroCameraTrack, '', '')
+      19: Audio.SetFlag('eNIS_EndofRace', true)
+      20: return 
+      23: ChangeState('outro_message')
+      24: return 
+== stategraph_basicrace_postrace_handler_flowreadyforoutro owner=basicrace msg=51E7B945 trans=stategraph_basicrace_outronis #171
+      2: ChangeState('outronis')
+      3: return 
+== stategraph_basicrace_postrace_handler_enterfreeroam owner=basicrace msg=7FCF45CF trans=stategraph_basicrace_done #194
+      3: Game.SetCopsEnabled(true)
+      6: ChangeState('done')
+      7: return 
+== stategraph_basicrace_outronis_handler_niscomplete owner=basicrace msg=6638715C trans=stategraph_basicrace_outro_message #214
+      4: Audio.SetFlag('eNIS_EndofRace', false)
+      7: ChangeState('outro_message')
+      8: return 
+== stategraph_basicrace_outromovie_handler_notifymoviefinished owner=basicrace msg=89BB36FE trans=stategraph_basicrace_done #171
+      2: ChangeState('done')
+      3: return 
+== stategraph_basicrace_outromovie_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_done #233
+      1: test r0.OutroMovie ~= 0 -> skip ; r3=r0.OutroMovie
+      2: jmp 8
+      4: if (r0.OutroMovie == '') ~= 0 then skip
+      5: jmp 7
+      8: test true ~= 0 -> skip ; r3=true
+      9: jmp 14
+      12: EPlayRaceMovie(r0.OutroMovie)
+      13: return 
+      16: ChangeState('done')
+      17: return 
+== stategraph_pursuit_mini_game_postpursuit_handler_flowreadyforoutro owner=pursuit_mini_game msg=51E7B945 trans=stategraph_pursuit_mini_game_outronis #176
+      2: ChangeState('outronis')
+      3: return 
+== stategraph_race_bin_introduce_rival_handler_notifymoviefinished owner=race_bin msg=89BB36FE trans= #144
+      0: return 
+== stategraph_race_bin_initial_handler_stateenter_9 owner=race_bin_10 msg=5E1AA4C2 trans= #153
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_introduce_rival_handler_stateenter owner=race_bin msg=5E1AA4C2 trans=stategraph_race_bin_check_rival #201
+      2: Game.IntroduceRival()
+      5: ChangeState('check_rival')
+      6: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed owner=race_bin msg=26BB525D trans=stategraph_race_bin_check_rival #336
+      3: if ((r2.NumChallengesPassed + 1) == r0.RequiredChallenges) ~= 0 then skip
+      4: jmp 18
+      6: if (0 <= r0.SMSCellChallenge) ~= 0 then skip
+      7: jmp 11
+      10: EAddSMS(r0.SMSCellChallenge)
+      12: test r0.CellChallengeRace ~= 0 -> skip ; r4=r0.CellChallengeRace
+      13: jmp 18
+      17: Game.UnlockRace(r0.CellChallengeRace)
+      20: ChangeState('check_rival')
+      21: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_10 owner=race_bin_06 msg=26BB525D trans= #265
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(100)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_enteringgameplay owner=race_bin msg=32F2E00B trans=stategraph_race_bin_check_rival #174
+      2: ChangeState('check_rival')
+      3: return 
+== stategraph_race_bin_initial_handler_stateenter_3 owner=race_bin_12 msg=5E1AA4C2 trans= #130
+      0: return 
+== stategraph_race_bin_initial_handler_stateenter_4 owner=race_bin_13 msg=5E1AA4C2 trans= #190
+      1: r2['DoneFirstSMS'] = false
+      3: r2['DoneSecondSMS'] = false
+      5: r2['DoneThirdSMS'] = false
+      6: return 
+== stategraph_race_bin_initial_handler_stateenter_15 owner=race_bin_13 msg=5E1AA4C2 trans= #206
+      1: r2['DoneFirstSMS'] = false
+      3: r2['DoneSecondSMS'] = false
+      6: Game.SetHasRapSheet()
+      7: return 
+== stategraph_race_bin_initial_handler_stateenter_2 owner=race_bin_14 msg=5E1AA4C2 trans= #207
+      1: r2['DoneFirstSMS'] = false
+      3: r2['DoneSecondSMS'] = false
+      6: EAddSMS(125)
+      9: EAddSMS(126)
+      10: return 
+== stategraph_race_bin_initial_handler_stateenter_5 owner=race_bin_15 msg=5E1AA4C2 trans= #175
+      1: r2['DoneFirstSMS'] = false
+      3: r2['DoneSecondSMS'] = false
+      4: return 
+== stategraph_race_bin_initial_handler_stateenter_7 owner=race_bin_12 msg=5E1AA4C2 trans= #153
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_initial_handler_stateenter_8 owner=race_bin_11 msg=5E1AA4C2 trans= #153
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_initial_handler_stateenter_6 owner=race_bin_09 msg=5E1AA4C2 trans= #153
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_8 owner=race_bin_08 msg=26BB525D trans= #263
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (3 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(61)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_9 owner=race_bin_07 msg=26BB525D trans= #263
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(133)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_6 owner=race_bin_11 msg=26BB525D trans= #264
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(38)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_7 owner=race_bin_10 msg=26BB525D trans= #262
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(132)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifyfinished owner=race_bin_15 msg=0EF58DC9 trans= #138
+      0: return 
+== stategraph_race_bin_rival_locked_handler_notifyplayerrep_2 owner=race_bin_15 msg=2F1DBF5A trans= #140
+      0: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement owner=race_bin msg=122C89F1 trans=stategraph_race_bin_check_rival #275
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      8: jmp 18
+      12: if (r1.Activity == r0.WorldRaces[(1 - 1)]) ~= 0 then skip
+      13: jmp 18
+      16: ChangeState('check_rival')
+      17: return 
+      18: FORLOOP A=3 B=255 C=501
+      19: return 
+== stategraph_race_bin_rival_locked_handler_notifyplayerrep owner=race_bin msg=2F1DBF5A trans=stategraph_race_bin_check_rival #213
+      3: Debug.Print('script got rep')
+      6: ChangeState('check_rival')
+      7: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_12 owner=race_bin_04 msg=26BB525D trans= #266
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (4 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(102)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_13 owner=race_bin_09 msg=26BB525D trans= #266
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(43)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_11 owner=race_bin_05 msg=26BB525D trans= #266
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (3 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(101)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_2 owner=race_bin_15 msg=26BB525D trans= #314
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (1 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(124)
+      14: if (3 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      15: jmp 24
+      17: test r2.DoneSecondSMS ~= 1 -> skip ; r4=r2.DoneSecondSMS
+      18: jmp 24
+      20: r2['DoneSecondSMS'] = true
+      23: EAddSMS(137)
+      24: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_5 owner=race_bin_12 msg=26BB525D trans= #262
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (1 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(33)
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_3 owner=race_bin_14 msg=26BB525D trans= #313
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(19)
+      14: if (3 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      15: jmp 24
+      17: test r2.DoneSecondSMS ~= 1 -> skip ; r4=r2.DoneSecondSMS
+      18: jmp 24
+      20: r2['DoneSecondSMS'] = true
+      23: EAddSMS(22)
+      24: return 
+== stategraph_race_bin_rival_locked_handler_notifychallengepassed_4 owner=race_bin_13 msg=26BB525D trans= #353
+      3: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      4: if (1 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      5: jmp 14
+      7: test r2.DoneFirstSMS ~= 1 -> skip ; r4=r2.DoneFirstSMS
+      8: jmp 14
+      10: r2['DoneFirstSMS'] = true
+      13: EAddSMS(35)
+      14: if (2 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      15: jmp 24
+      17: test r2.DoneSecondSMS ~= 1 -> skip ; r4=r2.DoneSecondSMS
+      18: jmp 24
+      20: r2['DoneSecondSMS'] = true
+      23: EAddSMS(25)
+      24: if (3 <= Bin.GetNumChallengesPassed(r0.BinIndex)) ~= 0 then skip
+      25: jmp 34
+      27: test r2.DoneThirdSMS ~= 1 -> skip ; r4=r2.DoneThirdSMS
+      28: jmp 34
+      30: r2['DoneThirdSMS'] = true
+      33: EAddSMS(26)
+      34: return 
+== stategraph_pursuit_mini_game_survived_handler_notifysimtick owner=pursuit_mini_game msg=2F80BB9F trans=stategraph_pursuit_mini_game_postpursuit #227
+      2: r3 = Game.GetSimTime()
+      4: if (r2.PostPursuitTime < Game.GetSimTime()) ~= 0 then skip
+      5: jmp 9
+      8: ChangeState('postpursuit')
+      9: return 
+== stategraph_pursuit_mini_game_restarting_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #193
+      1: test r0.RestartActivity ~= 0 -> skip ; r3=r0.RestartActivity
+      2: jmp 7
+      6: Activity.Run(r0.RestartActivity)
+      7: return 
+== stategraph_pursuit_mini_game_survived_handler_restartrace owner=pursuit_mini_game msg=6CE66AA0 trans=stategraph_pursuit_mini_game_restarting #173
+      2: ChangeState('restarting')
+      3: return 
+== stategraph_pursuit_mini_game_survived_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #319
+      2: r3 = Game.GetSimTime()
+      4: r2['PostPursuitTime'] = (Game.GetSimTime() + 2)
+      8: HUD.ShowMessage('LANGUAGE_HUD_COPS_SUCCESSFULLY_EVADED')
+      12: Demo.SetRaceCompleteForFE(r0.RestartActivity)
+      13: return 
+== stategraph_pursuit_mini_game_racing_handler_notifysimtick owner=pursuit_mini_game msg=2F80BB9F trans=stategraph_pursuit_mini_game_survived #291
+      3: r4 = Game.GetSimTime()
+      8: RaceStatus:SetTaskTime((r2.SurvivalTime - Game.GetSimTime()))
+      9: if ((r2.SurvivalTime - Game.GetSimTime()) <= 0) ~= 0 then skip
+      10: jmp 18
+      14: EBailPursuit(1, 1)
+      17: ChangeState('survived')
+      18: return 
+== stategraph_pursuit_mini_game_postpursuit_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #283
+      4: Debug.ShowScreenMessage('You beat the game!', 20)
+      8: Demo.StorePursuitRepForFE(r0.RestartActivity)
+      10: EShowPostPursuit()
+      11: return 
+== stategraph_pursuit_mini_game_racing_handler_perpbusted owner=pursuit_mini_game msg=CE28AB70 trans=stategraph_pursuit_mini_game_busted #167
+      2: ChangeState('busted')
+      3: return 
+== stategraph_pursuit_mini_game_racing_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #166
+      1: EJumpToStrategyFlow()
+      2: return 
+== stategraph_pursuit_mini_game_racing_handler_perpescaped owner=pursuit_mini_game msg=8CB52A16 trans=stategraph_pursuit_mini_game_escaped #195
+      3: EBailPursuit(0, 1)
+      6: ChangeState('escaped')
+      7: return 
+== stategraph_pursuit_mini_game_racing_handler_restartrace owner=pursuit_mini_game msg=6CE66AA0 trans=stategraph_pursuit_mini_game_restarting #171
+      2: ChangeState('restarting')
+      3: return 
+== stategraph_race_bin_initial_handler_stateenter owner=race_bin msg=5E1AA4C2 trans=stategraph_race_bin_unlock_races #333
+      1: if (r0.EntryActivity == None) ~= 1 then skip
+      2: jmp 17
+      5: test r0.EntryActivity.AutoStart ~= 0 -> skip ; r3=r0.EntryActivity.AutoStart
+      6: jmp 8
+      7: return 
+      11: Debug.Print('starting bin activity')
+      15: Activity.Run(r0.EntryActivity)
+      16: return 
+      18: if (r0.EntryCellCallID == 0) ~= 1 then skip
+      19: jmp 23
+      22: EAddSMS(r0.EntryCellCallID)
+      25: ChangeState('unlock_races')
+      26: return 
+== stategraph_race_bin_initial_handler_stateenter_10 owner=race_bin_08 msg=5E1AA4C2 trans= #155
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_initial_handler_notifytimer owner=race_bin_14 msg=029084E4 trans= #131
+      0: return 
+== stategraph_race_bin_initial_handler_stateenter_11 owner=race_bin_07 msg=5E1AA4C2 trans= #155
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_initial_handler_stateenter_14 owner=race_bin_04 msg=5E1AA4C2 trans= #155
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_initial_handler_stateenter_12 owner=race_bin_06 msg=5E1AA4C2 trans= #155
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_initial_handler_stateenter_13 owner=race_bin_05 msg=5E1AA4C2 trans= #155
+      1: r2['DoneFirstSMS'] = false
+      2: return 
+== stategraph_race_bin_check_rival_handler_notifyraceplacement owner=race_bin msg=122C89F1 trans= #140
+      0: return 
+== stategraph_pursuit_zone_initial_handler_triggerenter owner=pursuit_zone msg=459EABF5 trans=stategraph_pursuit_zone_done #243
+      2: if (r1.Sender == r0.engagetrigger) ~= 0 then skip
+      3: jmp 11
+      7: Game.ForcePursuitStart(r0.PursuitLevel)
+      10: ChangeState('done')
+      11: return 
+== stategraph_race_bin_check_rival_handler_stateenter owner=race_bin msg=5E1AA4C2 trans=stategraph_race_bin_rival_locked,stategraph_race_bin_rival_unlocked #629
+      3: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      4: r2['NumRacesWon'] = Bin.GetNumRacesWon(r0.BinIndex)
+      8: r3 = Bin.GetNumChallengesPassed(r0.BinIndex)
+      9: r2['NumChallengesPassed'] = Bin.GetNumChallengesPassed(r0.BinIndex)
+      12: r3 = Game.GetPlayerBounty()
+      13: r2['PlayerBounty'] = Game.GetPlayerBounty()
+      18: Debug.Print('Bin checking rival conditions:')
+      24: Debug.Print('  NumRacesWon         = '..r2.NumRacesWon)
+      30: Debug.Print('  NumChallengesPassed = '..r2.NumChallengesPassed)
+      36: Debug.Print('  PlayerBounty        = '..r2.PlayerBounty)
+      39: if (r2.NumRacesWon < r0.RequiredRacesWon) ~= 0 then skip
+      40: jmp 42
+      44: if (r0.RequiredRacesWon <= r2.NumRacesWon) ~= 0 then skip
+      45: jmp 50
+      49: Debug.Print('****** Race condition satisfied *****')
+      52: if (r2.PlayerBounty < r0.RequiredBounty) ~= 0 then skip
+      53: jmp 55
+      57: if (r0.RequiredBounty <= r2.PlayerBounty) ~= 0 then skip
+      58: jmp 63
+      62: Debug.Print('******  Bounty condition satisified *****')
+      65: if (r2.NumChallengesPassed < r0.RequiredChallenges) ~= 0 then skip
+      66: jmp 68
+      70: if (r0.RequiredChallenges <= r2.NumChallengesPassed) ~= 0 then skip
+      71: jmp 76
+      75: Debug.Print('****** Challenges condition satisfied ******')
+      76: test false ~= 1 -> skip ; r3=false
+      77: jmp 82
+      80: ChangeState('rival_locked')
+      81: return 
+      84: ChangeState('rival_unlocked')
+      85: return 
+== stategraph_race_bin_initial_handler_notifyfinished owner=race_bin msg=0EF58DC9 trans=stategraph_race_bin_unlock_races #303
+      2: if (r1.Sender == r0.EntryActivity) ~= 0 then skip
+      3: jmp 11
+      7: Debug.Print('Bin entry activity finished')
+      10: ChangeState('unlock_races')
+      12: if (r0.EntryCellCallID == 0) ~= 1 then skip
+      13: jmp 17
+      16: EAddSMS(r0.EntryCellCallID)
+      17: return 
+== stategraph_race_bin_done_handler_stateenter owner=race_bin msg=5E1AA4C2 trans= #216
+      4: jmp 10
+      9: Game.UnlockRace(r0.WorldRaces[(1 - 1)])
+      10: FORLOOP A=3 B=255 C=505
+      11: return 
+== stategraph_completion_unlock_initial_handler_stateenter owner=completion_unlock msg=5E1AA4C2 trans=stategraph_completion_unlock_monitor #267
+      1: r2['RaceDone'] = {}
+      2: r2['NumRaces'] = 0
+      4: if (r0.RaceList == None) ~= 1 then skip
+      5: jmp 9
+      8: r2['NumRaces'] = r0.RaceList.Count
+      13: jmp 17
+      16: r2.RaceDone[(1 - 1)] = false
+      17: FORLOOP A=3 B=255 C=507
+      20: ChangeState('monitor')
+      21: return 
+== stategraph_cell_engage_ring_handler_stateexit owner=cell_engage msg=9C020C14 trans= #186
+      3: Game.ExitEngagableTrigger(r0.TargetActivity)
+      4: return 
+== stategraph_cell_engage_ring_handler_declineentercareerevent owner=cell_engage msg=8870DE98 trans=stategraph_cell_engage_delay #215
+      3: r2['RingAgainTime'] = (r1.SimTime + r0.DelayTime)
+      6: ChangeState('delay')
+      7: return 
+== stategraph_cell_engage_ring_handler_acceptentercareerevent owner=cell_engage msg=AF4C4648 trans=stategraph_cell_engage_disable #208
+      3: Activity.Run(r0.TargetActivity)
+      6: ChangeState('disable')
+      7: return 
+== stategraph_cell_engage_ring_handler_stateenter owner=cell_engage msg=5E1AA4C2 trans= #254
+      2: r3 = Game.GetSimTime()
+      5: r2['StopRingTime'] = (Game.GetSimTime() + r0.RingTime)
+      7: ECellCall()
+      11: Game.EnterEngagableTrigger(r0.TargetActivity)
+      12: return 
+== stategraph_cell_engage_ring_handler_notifysimtick owner=cell_engage msg=2F80BB9F trans=stategraph_cell_engage_delay #238
+      2: if (r2.StopRingTime < r1.SimTime) ~= 0 then skip
+      3: jmp 11
+      7: r2['RingAgainTime'] = (r1.SimTime + r0.DelayTime)
+      10: ChangeState('delay')
+      11: return 
+== stategraph_drive_to_target_at_target_handler_stateenter owner=race_bin_16/drive_to_safe_house msg=5E1AA4C2 trans= #239
+      3: Game.KillTimer('cellusage')
+      7: Game.KillTimer('hurry')
+      11: Game.DoSafeHouseIntro(r0.RespawnMarker)
+      12: return 
+== stategraph_drive_to_target_at_target_handler_notifymoviefinished owner=race_bin_16/drive_to_safe_house msg=89BB36FE trans= #143
+      0: return 
+== stategraph_drive_to_target_at_target_handler_stateenter_2 owner=drive_to_target msg=5E1AA4C2 trans= #134
+      0: return 
+== stategraph_drive_to_target_at_target_handler_niscomplete owner=race_bin_16/drive_to_safe_house msg=6638715C trans= #135
+      0: return 
+== stategraph_completion_unlock_monitor_handler_notifyraceplacement owner=completion_unlock msg=122C89F1 trans=stategraph_completion_unlock_done #435
+      2: r3 = r1.Racer:IsPlayer()
+      3: test r1.Racer:IsPlayer() ~= 0 -> skip ; r3=r1.Racer:IsPlayer()
+      4: jmp 49
+      6: if (r1.Placing <= 3) ~= 0 then skip
+      7: jmp 49
+      13: jmp 27
+      17: if (r1.Activity == r0.RaceList[(1 - 1)]) ~= 0 then skip
+      18: jmp 22
+      21: r2.RaceDone[(1 - 1)] = true
+      24: test r2.RaceDone[(1 - 1)] ~= 0 -> skip ; r7=r2.RaceDone[(1 - 1)]
+      25: jmp 27
+      27: FORLOOP A=4 B=255 C=497
+      29: if (r0.NumRacesRequired <= (0 + 1)) ~= 0 then skip
+      30: jmp 49
+      32: if (r0.TargetActivities == None) ~= 1 then skip
+      33: jmp 46
+      39: jmp 45
+      44: Activity.Run(r0.TargetActivities[(1 - 1)])
+      45: FORLOOP A=4 B=255 C=505
+      48: ChangeState('done')
+      49: return 
+== stategraph_drive_to_target_activate_gps_handler_stateenter owner=drive_to_target msg=5E1AA4C2 trans=stategraph_drive_to_target_driving #255
+      3: Game.ShowGPS(true)
+      10: Game.NavigatePlayerTo(r0.target, r0.MiniMapItem, 0, true)
+      13: ChangeState('driving')
+      14: return 
+== stategraph_bin_race_engage_prompt_handler_stateexit owner=bin_race_engage msg=9C020C14 trans= #213
+      4: Game.ExitEngagableTrigger(r2.InsideTrigger.TargetActivity)
+      5: r2['InsideTrigger'] = None
+      6: return 
+== stategraph_bin_race_engage_prompt_handler_stateenter owner=bin_race_engage msg=5E1AA4C2 trans= #208
+      4: Game.EnterEngagableTrigger(r2.InsideTrigger.TargetActivity)
+      5: return 
+== stategraph_bin_race_engage_prompt_handler_triggerexit owner=bin_race_engage msg=A72E4B1B trans=stategraph_bin_race_engage_reset #256
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      6: jmp 8
+      7: return 
+      10: r3 = r1.Element:IsPlayer()
+      11: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      12: jmp 20
+      15: if (r1.Sender == r2.InsideTrigger) ~= 0 then skip
+      16: jmp 20
+      19: ChangeState('reset')
+      20: return 
+== stategraph_bin_race_engage_prompt_handler_declineentercareerevent owner=bin_race_engage msg=8870DE98 trans= #249
+      4: Game.ExitEngagableTrigger(r2.InsideTrigger.TargetActivity)
+      9: Game.EnterEngagableTrigger(r2.InsideTrigger.TargetActivity)
+      10: return 
+== stategraph_bin_race_engage_initial_handler_stateenter owner=bin_race_engage msg=5E1AA4C2 trans=stategraph_bin_race_engage_wait #225
+      0: r2['NumTriggers'] = 0
+      2: if (r0.RaceTriggers == None) ~= 1 then skip
+      3: jmp 7
+      6: r2['NumTriggers'] = r0.RaceTriggers.Count
+      9: ChangeState('wait')
+      10: return 
+== stategraph_bin_race_engage_prompt_handler_acceptentercareerevent owner=bin_race_engage msg=AF4C4648 trans=stategraph_bin_race_engage_reset #228
+      4: Activity.Run(r2.InsideTrigger.TargetActivity)
+      7: ChangeState('reset')
+      8: return 
+== stategraph_cell_engage_initial_handler_notifyraceplacement owner=cell_engage msg=122C89F1 trans=stategraph_cell_engage_ring #260
+      2: if (r1.Activity == r0.GateActivity) ~= 0 then skip
+      3: jmp 15
+      6: r3 = r1.Racer:IsPlayer()
+      7: test r1.Racer:IsPlayer() ~= 0 -> skip ; r3=r1.Racer:IsPlayer()
+      8: jmp 15
+      10: if (r1.Placing < 4) ~= 0 then skip
+      11: jmp 15
+      14: ChangeState('ring')
+      15: return 
+== stategraph_cell_engage_delay_handler_notifysimtick owner=cell_engage msg=2F80BB9F trans=stategraph_cell_engage_ring #202
+      2: if (r2.RingAgainTime < r1.SimTime) ~= 0 then skip
+      3: jmp 7
+      6: ChangeState('ring')
+      7: return 
+== stategraph_bin_race_engage_reset_handler_stateenter owner=bin_race_engage msg=5E1AA4C2 trans=stategraph_bin_race_engage_wait #161
+      2: ChangeState('wait')
+      3: return 
+== stategraph_bin_race_engage_wait_handler_triggerenter owner=bin_race_engage msg=459EABF5 trans=stategraph_bin_race_engage_prompt #435
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      6: jmp 8
+      7: return 
+      10: r3 = r1.Element:IsPlayer()
+      11: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      12: jmp 14
+      13: return 
+      16: r3 = Game.AllowEngageEvents()
+      17: test Game.AllowEngageEvents() ~= 1 -> skip ; r3=Game.AllowEngageEvents()
+      18: jmp 20
+      19: return 
+      24: jmp 47
+      28: if (r0.RaceTriggers[(1 - 1)] == r1.Sender) ~= 0 then skip
+      29: jmp 47
+      33: r7 = Game.IsRaceCompleted(r0.RaceTriggers[(1 - 1)].TargetActivity)
+      34: test Game.IsRaceCompleted(r0.RaceTriggers[(1 - 1)].TargetActivity) ~= 1 -> skip ; r7=Game.IsRaceCompleted(r0.RaceTriggers[(1 - 1)].TargetActivity)
+      35: jmp 47
+      39: r7 = Game.IsRaceUnlocked(r0.RaceTriggers[(1 - 1)].TargetActivity)
+      40: test Game.IsRaceUnlocked(r0.RaceTriggers[(1 - 1)].TargetActivity) ~= 0 -> skip ; r7=Game.IsRaceUnlocked(r0.RaceTriggers[(1 - 1)].TargetActivity)
+      41: jmp 47
+      42: r2['InsideTrigger'] = r0.RaceTriggers[(1 - 1)]
+      45: ChangeState('prompt')
+      46: return 
+      47: FORLOOP A=3 B=255 C=488
+      48: return 
+== stategraph_milestone_challenge_initial_handler_notifymilestonereached owner=milestone_challenge msg=5F7D24A3 trans=stategraph_milestone_challenge_done #278
+      2: if (r1.MilestoneName == r0.MilestoneName) ~= 1 then skip
+      3: jmp 5
+      4: return 
+      7: if (r1.ValueReached < r0.ThreshholdValue) ~= 0 then skip
+      8: jmp 10
+      9: return 
+      12: Game.ChallengeCompleted()
+      15: ChangeState('done')
+      16: return 
+== stategraph_milestone_challenge_initial_handler_notifymilestoneprogress owner=milestone_challenge msg=C9EABFC6 trans= #294
+      2: if (r1.MilestoneName == r0.MilestoneName) ~= 1 then skip
+      3: jmp 5
+      4: return 
+      7: if (r1.ValueReached < r0.ThreshholdValue) ~= 0 then skip
+      8: jmp 10
+      9: return 
+      11: test r2.Done ~= 0 -> skip ; r3=r2.Done
+      12: jmp 14
+      13: return 
+      15: r2['Done'] = true
+      19: Game.AwardPlayerBounty(r0.Bounty)
+      20: return 
+== stategraph_menu_gate_nis_handler_stateenter owner=menu_gate msg=5E1AA4C2 trans= #186
+      7: EPlayRaceNIS(nil, r0.IntroNIS, 'Intro', 0, 0, nil, nil)
+      8: return 
+== stategraph_menu_gate_initial_handler_triggerexit owner=menu_gate msg=A72E4B1B trans= #283
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      6: jmp 8
+      7: return 
+      9: if (r2.InZone == None) ~= 0 then skip
+      10: jmp 12
+      11: return 
+      14: if (r2.InZone == r1.Sender) ~= 1 then skip
+      15: jmp 17
+      16: return 
+      19: r3 = r1.Element:IsPlayer()
+      20: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      21: jmp 23
+      22: return 
+      27: Game.ExitGateZone(r2.InZone, r0.ZoneType)
+      28: r2['InZone'] = None
+      29: return 
+== stategraph_menu_gate_initial_handler_triggerenter owner=menu_gate msg=459EABF5 trans= #518
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      6: jmp 8
+      7: return 
+      10: r3 = r1.Element:IsPlayer()
+      11: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      12: jmp 14
+      13: return 
+      17: if (r1.Sender.ZoneType == None) ~= 1 then skip
+      18: jmp 25
+      24: Debug.Print('Zone Type '..r1.Sender.ZoneType)
+      26: if (r1.Sender.ZoneType == r0.ZoneType) ~= 1 then skip
+      27: jmp 29
+      28: return 
+      30: if (r2.InZone == None) ~= 1 then skip
+      31: jmp 33
+      32: return 
+      35: r5 = Game.AllowMenuGates()
+      36: if (r0.ZoneType == 'safehouse') ~= 0 then skip
+      37: jmp 42
+      40: r6 = Game.AllowEngageSafehouse()
+      42: test Game.AllowEngageSafehouse() ~= 1 -> skip ; r5=Game.AllowEngageSafehouse()
+      43: jmp 45
+      44: return 
+      46: if (r0.ZoneList == None) ~= 1 then skip
+      47: jmp 71
+      53: jmp 70
+      55: if (r1.Sender == r0.ZoneList[(1 - 1)]) ~= 0 then skip
+      56: jmp 70
+      60: r11 = Game.IsActiveMenuGate(r1.Sender)
+      61: test Game.IsActiveMenuGate(r1.Sender) ~= 0 -> skip ; r11=Game.IsActiveMenuGate(r1.Sender)
+      62: jmp 70
+      67: Game.EnterGateZone(r1.Sender, r0.ZoneType)
+      68: r2['InZone'] = r1.Sender
+      69: return 
+      70: FORLOOP A=8 B=255 C=494
+      71: return 
+== stategraph_menu_gate_nis_handler_niscomplete owner=menu_gate msg=6638715C trans=stategraph_menu_gate_initial #216
+      1: if (r2.InZone == None) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: Game.DoZoneMenuAction(r2.InZone)
+      10: ChangeState('initial')
+      11: return 
+== stategraph_pursuit_mini_game_done_handler_stateenter owner=pursuit_mini_game msg=5E1AA4C2 trans= #133
+      0: return 
+== stategraph_pursuit_mini_game_escaped_handler_restartrace owner=pursuit_mini_game msg=6CE66AA0 trans=stategraph_pursuit_mini_game_restarting #170
+      2: ChangeState('restarting')
+      3: return 
+== stategraph_pursuit_mini_game_escaped_handler_notifysimtick owner=pursuit_mini_game msg=2F80BB9F trans=stategraph_pursuit_mini_game_postpursuit #225
+      2: r3 = Game.GetSimTime()
+      4: if (r2.PostPursuitTime < Game.GetSimTime()) ~= 0 then skip
+      5: jmp 9
+      8: ChangeState('postpursuit')
+      9: return 
+== stategraph_milestone_challenge_initial_handler_stateenter owner=milestone_challenge msg=5E1AA4C2 trans= #149
+      1: r2['Done'] = false
+      2: return 
+== stategraph_pursuit_mini_game_busted_handler_restartrace owner=pursuit_mini_game msg=6CE66AA0 trans=stategraph_pursuit_mini_game_restarting #170
+      2: ChangeState('restarting')
+      3: return 
+== stategraph_drive_to_target_driving_handler_stateenter owner=race_bin_16/drive_to_safe_house msg=5E1AA4C2 trans=stategraph_drive_to_target_done #265
+      2: r3 = Game.SkipCareerIntro()
+      3: test Game.SkipCareerIntro() ~= 0 -> skip ; r3=Game.SkipCareerIntro()
+      4: jmp 9
+      7: ChangeState('done')
+      8: return 
+      13: Game.SetTimer('cellusage', 0.25)
+      18: Game.SetTimer('hurry', 120)
+      19: return 
+== stategraph_drive_to_target_driving_handler_notifytimer owner=race_bin_16/drive_to_safe_house msg=029084E4 trans= #373
+      1: if (r1.Name == 'cellusage') ~= 0 then skip
+      2: jmp 23
+      6: Game.KillTimer('cellusage')
+      10: Game.ShowGPS(true)
+      17: Game.NavigatePlayerTo(r0.target, r0.MiniMapItem, 2000, true)
+      21: Debug.Print('making cell usage call')
+      22: return 
+      24: if (r1.Name == 'hurry') ~= 0 then skip
+      25: jmp 34
+      29: Game.KillTimer('hurry')
+      32: EAddSMS(121)
+      33: return 
+      34: return 
+== stategraph_drive_to_target_driving_handler_triggerenter owner=drive_to_target msg=459EABF5 trans=stategraph_drive_to_target_at_target #303
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      6: jmp 8
+      7: return 
+      10: if (r1.Sender == r0.target) ~= 0 then skip
+      11: jmp 24
+      14: r3 = r1.Element:IsPlayer()
+      15: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      16: jmp 24
+      20: Debug.Print('Drive to target - arrived')
+      23: ChangeState('at_target')
+      24: return 
+== stategraph_drive_to_target_driving_handler_notifyspeechstatus owner=race_bin_16/drive_to_safe_house msg=24624AED trans= #140
+      0: return 
+== stategraph_drive_to_target_done_handler_stateenter_2 owner=drive_to_target msg=5E1AA4C2 trans= #269
+      3: Debug.Print('Drive to target done')
+      7: Game.SetCopsEnabled(true)
+      11: Game.ShowGPS(false)
+      15: Game.NotifyActivityFinsihed(r0)
+      16: return 
+== stategraph_drive_to_target_done_handler_stateenter owner=race_bin_16/drive_to_safe_house msg=5E1AA4C2 trans= #130
+      0: return 
+== stategraph_drive_to_target_driving_handler_notifycellcallcomplete owner=race_bin_16/drive_to_safe_house msg=23B3ABD0 trans= #144
+      0: return 
+== stategraph_drive_to_target_outro_movie_handler_stateenter owner=drive_to_target msg=5E1AA4C2 trans= #136
+      0: return 
+== stategraph_menu_gate_initial_handler_stateenter owner=menu_gate msg=5E1AA4C2 trans= #143
+      0: r2['InZone'] = None
+      1: return 
+== stategraph_menu_gate_initial_handler_entersafehouse owner=menu_gate msg=D8E54190 trans=stategraph_menu_gate_nis #269
+      1: if (r2.InZone == None) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      6: if (r1.ZoneType == r0.ZoneType) ~= 0 then skip
+      7: jmp 19
+      9: if (r0.IntroNIS == '') ~= 0 then skip
+      10: jmp 16
+      14: Game.DoZoneMenuAction(r2.InZone)
+      15: return 
+      18: ChangeState('nis')
+      19: return 
+== stategraph_drive_to_target_outro_movie_handler_notifymoviefinished owner=drive_to_target msg=89BB36FE trans= #145
+      0: return 
+== stategraph_drive_to_target_initial_handler_stateenter owner=drive_to_target msg=5E1AA4C2 trans=stategraph_drive_to_target_activate_gps,stategraph_drive_to_target_driving #242
+      3: Game.SetCopsEnabled(false)
+      5: test r0.AutoActivateGPS ~= 0 -> skip ; r3=r0.AutoActivateGPS
+      6: jmp 11
+      9: ChangeState('activate_gps')
+      10: return 
+      13: ChangeState('driving')
+      14: return 
+== stategraph_drive_to_target_initial_handler_careerintrodone owner=race_bin_16/drive_to_safe_house msg=21F36738 trans= #137
+      0: return 
+== stategraph_drive_to_target_initial_handler_stateenter_2 owner=race_bin_16/drive_to_safe_house msg=5E1AA4C2 trans= #222
+      2: r3 = Game.SkipCareerIntro()
+      3: test Game.SkipCareerIntro() ~= 0 -> skip ; r3=Game.SkipCareerIntro()
+      4: jmp 6
+      5: return 
+      8: EAddSMS(15)
+      10: r2['DoneWorldMap'] = false
+      11: return 
+== stategraph_basicrace_racing_handler_notifyracetimeexpired_2 owner=basicrace msg=AA228814 trans=stategraph_basicrace_onlineover,stategraph_basicrace_raceover #424
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 26
+      6: r3 = Game.PlayerIsLocal(r1.Racer)
+      7: test Game.PlayerIsLocal(r1.Racer) ~= 0 -> skip ; r3=Game.PlayerIsLocal(r1.Racer)
+      8: jmp 17
+      10: test r2.SummaryVisible ~= 1 -> skip ; r3=r2.SummaryVisible
+      11: jmp 17
+      14: Game.ShowRaceOverSummary()
+      16: r2['SummaryVisible'] = true
+      19: r3 = Game.AllRacersDone()
+      20: test Game.AllRacersDone() ~= 0 -> skip ; r3=Game.AllRacersDone()
+      21: jmp 25
+      24: ChangeState('onlineover')
+      25: return 
+      27: r2['ShowTips'] = false
+      29: r2['ShowPostRace'] = false
+      31: r2['ShowPauseMenu'] = true
+      33: test r2.PlayerBusted ~= 0 -> skip ; r3=r2.PlayerBusted
+      34: jmp 36
+      35: return 
+      38: ChangeState('raceover')
+      39: return 
+== stategraph_basicrace_racing_handler_notifyraceplacement_3 owner=basicrace msg=122C89F1 trans=stategraph_basicrace_onlineover,stategraph_basicrace_postrace,stategraph_basicrace_raceover #660
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 32
+      6: r3 = Game.PlayerIsLocal(r1.Racer)
+      7: test Game.PlayerIsLocal(r1.Racer) ~= 0 -> skip ; r3=Game.PlayerIsLocal(r1.Racer)
+      8: jmp 23
+      10: test r2.SummaryVisible ~= 1 -> skip ; r3=r2.SummaryVisible
+      11: jmp 23
+      14: Game.ShowRaceOverSummary()
+      16: r2['SummaryVisible'] = true
+      19: r3 = Game.GetSimTime()
+      22: r2['OnlinePostRaceTime'] = (Game.GetSimTime() + r2.RaceOverMessageDuration)
+      25: r3 = Game.AllRacersDone()
+      26: test Game.AllRacersDone() ~= 0 -> skip ; r3=Game.AllRacersDone()
+      27: jmp 31
+      30: ChangeState('onlineover')
+      31: return 
+      35: r3 = Game.GetRacerIndex(r1.Racer)
+      36: if (0 < Game.GetRacerIndex(r1.Racer)) ~= 0 then skip
+      37: jmp 79
+      41: r4 = Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      42: test Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer)) ~= 0 -> skip ; r4=Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      43: jmp 79
+      46: r5 = Game.AllHumanPlayersDone()
+      47: test Game.AllHumanPlayersDone() ~= 0 -> skip ; r5=Game.AllHumanPlayersDone()
+      48: jmp 79
+      50: if (r1.Placing == 1) ~= 0 then skip
+      51: jmp 56
+      54: ChangeState('postrace')
+      55: return 
+      57: r2['ShowTips'] = false
+      59: r2['ShowPostRace'] = false
+      61: r2['ShowPauseMenu'] = true
+      64: r5 = Game.IsOnlineGame()
+      65: test Game.IsOnlineGame() ~= 1 -> skip ; r5=Game.IsOnlineGame()
+      66: jmp 72
+      69: r5 = Game.IsLANGame()
+      70: test Game.IsLANGame() ~= 0 -> skip ; r5=Game.IsLANGame()
+      71: jmp 76
+      73: r2['ShowPostRace'] = true
+      75: r2['ShowPauseMenu'] = false
+      78: ChangeState('raceover')
+      79: return 
+== stategraph_basicrace_racing_handler_notifyracetimesectick_3 owner=checkpointrace msg=3E6D010D trans= #313
+      1: test r2.SuddenDeathMode ~= 0 -> skip ; r3=r2.SuddenDeathMode
+      2: jmp 23
+      4: if (0 < r0.OvertimePenaltyPerSec) ~= 0 then skip
+      5: jmp 23
+      10: jmp 22
+      13: test r2.InRace[(1 - 1)] ~= 0 -> skip ; r6=r2.InRace[(1 - 1)]
+      14: jmp 22
+      21: Game.AwardCash(r2.Element[(1 - 1)], -r0.OvertimePenaltyPerSec)
+      22: FORLOOP A=3 B=255 C=499
+      23: return 
+== stategraph_basicrace_racing_handler_notifyracetimesectick owner=speedtraprace msg=3E6D010D trans= #310
+      1: test r2.SuddenDeathMode ~= 0 -> skip ; r3=r2.SuddenDeathMode
+      2: jmp 23
+      4: if (0 < r0.OvertimePenaltyPerSec) ~= 0 then skip
+      5: jmp 23
+      10: jmp 22
+      13: test r2.InRace[(1 - 1)] ~= 0 -> skip ; r6=r2.InRace[(1 - 1)]
+      14: jmp 22
+      21: Game.AwardCash(r2.Element[(1 - 1)], -r0.OvertimePenaltyPerSec)
+      22: FORLOOP A=3 B=255 C=499
+      23: return 
+== stategraph_basicrace_racing_handler_notifyraceplacement_2 owner=checkpointrace msg=122C89F1 trans= #166
+      1: r2['SuddenDeathMode'] = true
+      2: return 
+== stategraph_basicrace_racing_handler_notifyonlineraceover owner=basicrace msg=B16576C0 trans=stategraph_basicrace_onlineover #218
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 9
+      4: test r1.ShowPostRace ~= 0 -> skip ; r3=r1.ShowPostRace
+      5: jmp 9
+      8: ChangeState('onlineover')
+      9: return 
+== stategraph_basicrace_racing_handler_notifymilestoneprogress_2 owner=milestonerace msg=C9EABFC6 trans= #366
+      1: test r2.PassedMilestone ~= 0 -> skip ; r3=r2.PassedMilestone
+      2: jmp 4
+      3: return 
+      6: if (r1.MilestoneName == r2.MilestoneName) ~= 1 then skip
+      7: jmp 9
+      8: return 
+      10: test r2.BiggerIsBetter ~= 0 -> skip ; r3=r2.BiggerIsBetter
+      11: jmp 18
+      14: if (r2.MilestoneThresh <= r1.ValueReached) ~= 0 then skip
+      15: jmp 18
+      17: r2['PassedMilestone'] = true
+      19: test r2.BiggerIsBetter ~= 1 -> skip ; r3=r2.BiggerIsBetter
+      20: jmp 27
+      23: if (r1.ValueReached <= r2.MilestoneThresh) ~= 0 then skip
+      24: jmp 27
+      26: r2['PassedMilestone'] = true
+      28: test r2.PassedMilestone ~= 0 -> skip ; r3=r2.PassedMilestone
+      29: jmp 35
+      34: Debug.ShowScreenMessage('Evade the cops!', 3)
+      35: return 
+== stategraph_basicrace_racing_handler_notifyraceplacement owner=speedtraprace msg=122C89F1 trans= #163
+      1: r2['SuddenDeathMode'] = true
+      2: return 
+== stategraph_basicrace_racing_handler_notifyraceabandoned owner=basicrace msg=C1E81A41 trans=stategraph_basicrace_abandoned #170
+      2: ChangeState('abandoned')
+      3: return 
+== stategraph_basicrace_racing_handler_notifytimer owner=16_1_0_partial_dday msg=029084E4 trans=stategraph_basicrace_postrace #480
+      1: if (r1.Name == 'killrace') ~= 0 then skip
+      2: jmp 24
+      6: Debug.Print('killing race')
+      10: Game.KillTimer('killrace')
+      14: Game.ClearAIControl(0)
+      18: Game.ClearAIControl(1)
+      20: EFadeScreenNoLoadingBarOff()
+      23: ChangeState('postrace')
+      25: if (r1.Name == 'fade') ~= 0 then skip
+      26: jmp 46
+      31: Game.SetTimer('killrace', 3)
+      35: Game.KillTimer('fade')
+      39: Game.ForceAIControl(0)
+      43: Game.ForceAIControl(1)
+      45: EFadeScreenNoLoadingBarOn()
+      47: if (r1.Name == 'dodisp') ~= 0 then skip
+      48: jmp 55
+      52: Game.KillTimer('dodisp')
+      54: EDispIntroRace()
+      55: return 
+== stategraph_basicrace_racing_handler_notifyspeechstatus_2 owner=16_2_1_d_day_intro msg=24624AED trans= #166
+      1: if (r1.SoundID == 204) ~= 0 then skip
+      2: jmp 3
+      3: return 
+== stategraph_basicrace_racing_handler_notifyvehicledestroyed owner=basicrace msg=04FD4A1B trans=stategraph_basicrace_onlineover,stategraph_basicrace_raceover #501
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 22
+      6: r3 = Game.PlayerIsLocal(r1.Racer)
+      7: test Game.PlayerIsLocal(r1.Racer) ~= 0 -> skip ; r3=Game.PlayerIsLocal(r1.Racer)
+      8: jmp 21
+      10: test r2.SummaryVisible ~= 1 -> skip ; r3=r2.SummaryVisible
+      11: jmp 21
+      12: r2['RaceOverMessageDuration'] = 2
+      15: Game.ShowRaceOverSummary()
+      17: r2['SummaryVisible'] = true
+      20: ChangeState('onlineover')
+      21: return 
+      25: r3 = Game.GetRacerIndex(r1.Racer)
+      26: if (0 < Game.GetRacerIndex(r1.Racer)) ~= 0 then skip
+      27: jmp 49
+      31: r4 = Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      32: test Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer)) ~= 0 -> skip ; r4=Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      33: jmp 49
+      36: r5 = Game.AllHumanPlayersDone()
+      37: test Game.AllHumanPlayersDone() ~= 0 -> skip ; r5=Game.AllHumanPlayersDone()
+      38: jmp 49
+      40: r2['ShowTips'] = false
+      42: r2['ShowPauseMenu'] = true
+      44: r2['ShowPostRace'] = false
+      45: r2['RaceOverMessageDuration'] = 1
+      48: ChangeState('raceover')
+      49: return 
+== stategraph_basicrace_racing_handler_notifytimer_2 owner=16_2_1_d_day_intro msg=029084E4 trans=stategraph_basicrace_postrace #324
+      1: if (r1.Name == 'eblown') ~= 0 then skip
+      2: jmp 13
+      6: Game.KillTimer('eblown')
+      9: Game.Fade()
+      12: ChangeState('postrace')
+      14: if (r1.Name == 'backup') ~= 0 then skip
+      15: jmp 28
+      19: Game.KillTimer('backup')
+      25: r4 = Game.GetPlayerElement(0)
+      27: Game.SabotageEngine(Game.GetPlayerElement(0), 5)
+      28: return 
+== stategraph_basicrace_racing_handler_notifyspeechstatus owner=16_1_0_partial_dday msg=24624AED trans= #170
+      1: if (r1.SoundID == 204) ~= 0 then skip
+      2: jmp 3
+      3: return 
+== stategraph_basicrace_racing_handler_notifysimtick_2 owner=16_2_1_d_day_intro msg=2F80BB9F trans= #136
+      0: return 
+== stategraph_basicrace_racing_handler_notifysimtick owner=16_1_0_partial_dday msg=2F80BB9F trans= #133
+      0: return 
+== stategraph_basicrace_racing_handler_notifysimtick_4 owner=basicrace msg=2F80BB9F trans= #331
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 23
+      4: test r2.SummaryVisible ~= 0 -> skip ; r3=r2.SummaryVisible
+      5: jmp 23
+      7: test r2.OnlinePostRaceShown ~= 1 -> skip ; r3=r2.OnlinePostRaceShown
+      8: jmp 23
+      11: r3 = Game.GetSimTime()
+      13: if (r2.OnlinePostRaceTime <= Game.GetSimTime()) ~= 0 then skip
+      14: jmp 23
+      17: Game.HideRaceOverSummary()
+      20: Game.ShowOnlinePostRaceScreen()
+      22: r2['OnlinePostRaceShown'] = true
+      23: return 
+== stategraph_basicrace_racing_handler_notifysimtick_3 owner=race_bin_01/epic_pursuit msg=2F80BB9F trans= #505
+      3: if (10 < (r1.SimTime - r2.RaceStartTime)) ~= 0 then skip
+      4: jmp 13
+      6: test r2.DoneCrossCall ~= 1 -> skip ; r4=r2.DoneCrossCall
+      7: jmp 13
+      10: ECellCall(95)
+      12: r2['DoneCrossCall'] = true
+      13: if (300 < (r1.SimTime - r2.RaceStartTime)) ~= 0 then skip
+      14: jmp 48
+      16: test r2.DoneMiaCall ~= 1 -> skip ; r4=r2.DoneMiaCall
+      17: jmp 48
+      22: r5 = Game.GetPlayerElement()
+      24: r4 = Game.SimableDistance(Game.GetPlayerElement(), r0.barrier_area)
+      26: if (500 < Game.SimableDistance(Game.GetPlayerElement(), r0.barrier_area)) ~= 0 then skip
+      27: jmp 48
+      30: ECellCall(96)
+      34: ENISWolrdGeometry('SCENERY_GROUP_DOOR', 0)
+      38: Game.ShowTriggerIcon(r0.barrier_area)
+      45: Game.NavigatePlayerTo(r0.barrier_area, r0.barrier_area, 0, false)
+      47: r2['DoneMiaCall'] = true
+      49: test r2.DoneMiaCall ~= 0 -> skip ; r4=r2.DoneMiaCall
+      50: jmp 55
+      54: ENISWolrdGeometry('SCENERY_GROUP_DOOR', 0)
+      55: return 
+== stategraph_basicrace_raceover_handler_notifysimtick owner=basicrace msg=2F80BB9F trans=stategraph_basicrace_postrace #386
+      2: Game.PreventPlayerBeingBusted()
+      5: r3 = Game.GetSimTime()
+      7: if (r2.PostRaceTime <= Game.GetSimTime()) ~= 0 then skip
+      8: jmp 31
+      10: test r2.SummaryVisible ~= 0 -> skip ; r3=r2.SummaryVisible
+      11: jmp 17
+      14: Game.HideRaceOverSummary()
+      16: r2['SummaryVisible'] = false
+      18: test r2.ShowPauseMenu ~= 0 -> skip ; r3=r2.ShowPauseMenu
+      19: jmp 25
+      22: Game.ShowLosingPostRaceScreen()
+      24: r2['ShowPauseMenu'] = false
+      26: test r2.ShowPostRace ~= 0 -> skip ; r3=r2.ShowPostRace
+      27: jmp 31
+      30: ChangeState('postrace')
+      31: return 
+== stategraph_basicrace_raceover_handler_notifyraceabandoned owner=basicrace msg=C1E81A41 trans=stategraph_basicrace_abandoned #172
+      2: ChangeState('abandoned')
+      3: return 
+== stategraph_basicrace_raceover_handler_stateenter owner=basicrace msg=5E1AA4C2 trans= #292
+      1: ETerminateMusic()
+      4: r3 = Game.GetSimTime()
+      7: r2['PostRaceTime'] = (Game.GetSimTime() + r2.RaceOverMessageDuration)
+      9: test r2.SummaryVisible ~= 1 -> skip ; r3=r2.SummaryVisible
+      10: jmp 16
+      13: Game.ShowRaceOverSummary()
+      15: r2['SummaryVisible'] = true
+      16: return 
+== stategraph_basicrace_raceover_handler_restartrace owner=basicrace msg=6CE66AA0 trans=stategraph_basicrace_prerace #161
+      2: ChangeState('prerace')
+      3: return 
+== stategraph_basicrace_prerace_handler_stateenter_9 owner=milestonerace msg=5E1AA4C2 trans= #307
+      1: r2['PassedMilestone'] = false
+      2: r2['MilestoneName'] = ''
+      3: r2['MilestoneThresh'] = 0
+      5: r2['BiggerIsBetter'] = true
+      7: test r0.MilestoneChallenge ~= 0 -> skip ; r3=r0.MilestoneChallenge
+      8: jmp 18
+      11: r2['MilestoneName'] = r0.MilestoneChallenge.MilestoneName
+      14: r2['MilestoneThresh'] = r0.MilestoneChallenge.ThreshholdValue
+      17: r2['BiggerIsBetter'] = r0.MilestoneChallenge.MilestoneBiggerIsBetter
+      18: return 
+== stategraph_basicrace_prerace_handler_stateenter_8 owner=challengerace msg=5E1AA4C2 trans= #274
+      1: r2['PassedMilestone'] = false
+      3: test r0.CopSpawnPoints ~= 0 -> skip ; r3=r0.CopSpawnPoints
+      4: jmp 21
+      11: jmp 20
+      19: Game.SpawnCop(r0.CopSpawnPoints[(1 - 1)], r0.CopSpawnType, true, false)
+      20: FORLOOP A=4 B=255 C=502
+      21: return 
+== stategraph_basicrace_prerace_handler_stateexit_2 owner=16_1_0_partial_dday msg=9C020C14 trans= #193
+      5: ENISNukeSmack(2183.26, -532.14, 119.86, 4)
+      6: return 
+== stategraph_basicrace_prerace_handler_stateexit owner=challengerace msg=9C020C14 trans= #239
+      4: Camera.SetGenericCamera('Cinematics', 'Challenge')
+      8: Game.ForceAIControl(0)
+      12: Game.ForceAIControl(1)
+      13: return 
+== stategraph_basicrace_racing_handler_notifyengineblown_2 owner=16_2_1_d_day_intro msg=5BC34E1C trans= #186
+      4: Game.SetTimer('eblown', 1)
+      5: return 
+== stategraph_basicrace_racing_handler_notifyengineblown owner=basicrace msg=5BC34E1C trans=stategraph_basicrace_onlineover,stategraph_basicrace_raceover #485
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 21
+      6: r3 = Game.PlayerIsLocal(r1.Racer)
+      7: test Game.PlayerIsLocal(r1.Racer) ~= 0 -> skip ; r3=Game.PlayerIsLocal(r1.Racer)
+      8: jmp 20
+      10: test r2.SummaryVisible ~= 1 -> skip ; r3=r2.SummaryVisible
+      11: jmp 20
+      14: Game.ShowRaceOverSummary()
+      16: r2['SummaryVisible'] = true
+      19: ChangeState('onlineover')
+      20: return 
+      22: test r0.DDayRace ~= 0 -> skip ; r3=r0.DDayRace
+      23: jmp 25
+      24: return 
+      28: r3 = Game.GetRacerIndex(r1.Racer)
+      29: if (0 < Game.GetRacerIndex(r1.Racer)) ~= 0 then skip
+      30: jmp 51
+      34: r4 = Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      35: test Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer)) ~= 0 -> skip ; r4=Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      36: jmp 51
+      39: r5 = Game.AllHumanPlayersDone()
+      40: test Game.AllHumanPlayersDone() ~= 0 -> skip ; r5=Game.AllHumanPlayersDone()
+      41: jmp 51
+      43: r2['ShowTips'] = false
+      45: r2['ShowPauseMenu'] = true
+      47: r2['ShowPostRace'] = false
+      50: ChangeState('raceover')
+      51: return 
+== stategraph_basicrace_racing_handler_notifymilestoneprogress owner=challengerace msg=C9EABFC6 trans= #379
+      1: test r2.PassedMilestone ~= 0 -> skip ; r3=r2.PassedMilestone
+      2: jmp 4
+      3: return 
+      6: if (r1.MilestoneName == r0.MilestoneName) ~= 1 then skip
+      7: jmp 9
+      8: return 
+      10: test r0.MilestoneBiggerIsBetter ~= 0 -> skip ; r3=r0.MilestoneBiggerIsBetter
+      11: jmp 23
+      14: if (r0.ThreshholdValue <= r1.ValueReached) ~= 0 then skip
+      15: jmp 23
+      17: r2['PassedMilestone'] = true
+      21: HUD.ShowMessage('HUD_CHALLENGE_COMPLETE')
+      22: return 
+      24: test r0.MilestoneBiggerIsBetter ~= 1 -> skip ; r3=r0.MilestoneBiggerIsBetter
+      25: jmp 37
+      28: if (r1.ValueReached <= r0.ThreshholdValue) ~= 0 then skip
+      29: jmp 37
+      31: r2['PassedMilestone'] = true
+      35: HUD.ShowMessage('HUD_CHALLENGE_COMPLETE')
+      36: return 
+      37: return 
+== stategraph_basicrace_racing_handler_notifyknockedout owner=basicrace msg=0D4D38E5 trans=stategraph_basicrace_onlineover,stategraph_basicrace_raceover #491
+      1: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      2: jmp 26
+      6: r3 = Game.PlayerIsLocal(r1.Racer)
+      7: test Game.PlayerIsLocal(r1.Racer) ~= 0 -> skip ; r3=Game.PlayerIsLocal(r1.Racer)
+      8: jmp 17
+      10: test r2.SummaryVisible ~= 1 -> skip ; r3=r2.SummaryVisible
+      11: jmp 17
+      14: Game.ShowRaceOverSummary()
+      16: r2['SummaryVisible'] = true
+      19: r3 = Game.AllRacersDone()
+      20: test Game.AllRacersDone() ~= 0 -> skip ; r3=Game.AllRacersDone()
+      21: jmp 25
+      24: ChangeState('onlineover')
+      25: return 
+      29: r3 = Game.GetRacerIndex(r1.Racer)
+      30: if (0 < Game.GetRacerIndex(r1.Racer)) ~= 0 then skip
+      31: jmp 52
+      35: r4 = Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      36: test Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer)) ~= 0 -> skip ; r4=Game.RacerIsHuman(Game.GetRacerIndex(r1.Racer))
+      37: jmp 52
+      40: r5 = Game.AllHumanPlayersDone()
+      41: test Game.AllHumanPlayersDone() ~= 0 -> skip ; r5=Game.AllHumanPlayersDone()
+      42: jmp 52
+      44: r2['ShowTips'] = false
+      46: r2['ShowPauseMenu'] = true
+      48: r2['ShowPostRace'] = false
+      51: ChangeState('raceover')
+      52: return 
+== stategraph_basicrace_racing_handler_notifycellcallstarted owner=16_1_0_partial_dday msg=5E2D52FC trans= #215
+      1: test r2.WaitForCallLoad ~= 0 -> skip ; r3=r2.WaitForCallLoad
+      2: jmp 10
+      7: Game.SetTimer('fade', 8)
+      9: r2['WaitForCallLoad'] = false
+      10: return 
+== stategraph_basicrace_raceover_handler_stateexit owner=basicrace msg=9C020C14 trans= #234
+      3: RaceStatus:SetActivelyRacing(false)
+      5: test r2.SummaryVisible ~= 0 -> skip ; r3=r2.SummaryVisible
+      6: jmp 10
+      9: Game.HideRaceOverSummary()
+      10: return 
+== stategraph_basicrace_racing_handler_niscomplete owner=race_bin_01/epic_pursuit msg=6638715C trans=stategraph_basicrace_raceover #279
+      1: test r2.PlayerHasWon ~= 0 -> skip ; r3=r2.PlayerHasWon
+      2: jmp 18
+      7: r4 = Game.GetPlayerElement()
+      8: Game.ChallengeComplete(Game.GetPlayerElement(), r5)
+      13: r4 = Game.GetPlayerElement()
+      14: Game.NotifyRaceFinished(Game.GetPlayerElement(), r5)
+      17: ChangeState('raceover')
+      18: return 
+== stategraph_basicrace_racing_handler_icecamerafinished owner=challengerace msg=DCDEAB15 trans= #222
+      1: test r2.HandleICEMessage ~= 0 -> skip ; r3=r2.HandleICEMessage
+      2: jmp 13
+      6: Game.ClearAIControl(0)
+      10: Game.ClearAIControl(1)
+      12: r2['HandleICEMessage'] = false
+      13: return 
+== stategraph_basicrace_racing_handler_triggerenter_24 owner=race_bin_10/10_7_3_drag msg=459EABF5 trans= #441
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 33
+      25: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.traffic1.marker, 1)
+      31: Game.SetTrafficSpeed(r0.traffic1, 1, 1)
+      32: return 
+      35: if (r1.Sender == r0.traffic1.trigger2) ~= 0 then skip
+      36: jmp 44
+      42: Game.SetTrafficSpeed(r0.traffic1, 30, 30)
+      43: return 
+      46: if (r1.Sender == r0.traffic1.trigger3) ~= 0 then skip
+      47: jmp 54
+      52: Game.SendCharacterStimulus(r0.traffic1, 'trigger')
+      53: return 
+      54: return 
+== stategraph_basicrace_racing_handler_triggerenter_23 owner=race_bin_01/epic_pursuit msg=459EABF5 trans= #775
+      2: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      3: jmp 5
+      4: return 
+      5: test r1.Element ~= 1 -> skip ; r4=r1.Element
+      6: jmp 8
+      7: return 
+      9: r5 = r1.Element:IsPlayer()
+      10: test r1.Element:IsPlayer() ~= 1 -> skip ; r5=r1.Element:IsPlayer()
+      11: jmp 13
+      12: return 
+      14: if (r1.Sender == r0.win_trigger) ~= 0 then skip
+      15: jmp 63
+      19: r5 = Game.GetSimableSpeedKmh(r1.Element)
+      26: Debug.Print('Epic win trigger: player speed is '..Game.GetSimableSpeedKmh(r1.Element))
+      27: if (180 <= Game.GetSimableSpeedKmh(r1.Element)) ~= 0 then skip
+      28: jmp 62
+      33: r7 = Game.SimableAngle(r1.Element, r0.win_trigger)
+      40: Debug.Print('Epic win trigger: angle match is '..Game.SimableAngle(r1.Element, r0.win_trigger))
+      41: if (0.8 <= Game.SimableAngle(r1.Element, r0.win_trigger)) ~= 0 then skip
+      42: jmp 62
+      46: Debug.Print('Epic win trigger: detected win!')
+      48: r2['PlayerHasWon'] = true
+      57: NIS.Play(r0.win_nis_marker, 'EndingNis04', 'Outro', 0, '', '')
+      61: EBailPursuit(0, 1)
+      62: return 
+      64: if (r1.Sender == r0.lose_trigger) ~= 0 then skip
+      65: jmp 82
+      67: test r2.PlayerHasWon ~= 1 -> skip ; r5=r2.PlayerHasWon
+      68: jmp 82
+      72: Debug.Print('Epic lose trigger: detected loss!')
+      76: Game.DetachCameraFromRacer(r1.Element)
+      80: Game.TotalRacer(r1.Element)
+      81: return 
+      83: if (r1.Sender == r0.barrier_area) ~= 0 then skip
+      84: jmp 94
+      88: Game.HideTriggerIcon(r0.barrier_area)
+      92: Game.ShowGPS(false)
+      93: return 
+      94: return 
+== stategraph_basicrace_racing_handler_triggerenter_27 owner=race_bin_04/4_7_4_drag msg=459EABF5 trans= #399
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      14: if (r1.Sender == r0.trigger1) ~= 0 then skip
+      15: jmp 25
+      23: Game.SpawnCharacter(r0.semilog, r0.spawn1, r0.spawn1.marker, 15)
+      24: return 
+      26: if (r1.Sender == r0.trigger3) ~= 0 then skip
+      27: jmp 47
+      36: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.traffic1.marker, 30)
+      45: Game.SpawnCharacter(r0.traffic2, r0.traffic2.spawn, r0.traffic2.marker, 30)
+      46: return 
+      47: return 
+== stategraph_basicrace_racing_handler_triggerenter_26 owner=race_bin_08/8_7_5_drag msg=459EABF5 trans= #562
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 32
+      24: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.finish_marker, 1)
+      30: Game.SetTrafficSpeed(r0.traffic1, 1, 1)
+      31: return 
+      34: if (r1.Sender == r0.traffic1.trigger2) ~= 0 then skip
+      35: jmp 43
+      41: Game.SetTrafficSpeed(r0.traffic1, 30, 30)
+      42: return 
+      45: if (r1.Sender == r0.traffic2.trigger1) ~= 0 then skip
+      46: jmp 63
+      55: Game.SpawnCharacter(r0.traffic2, r0.traffic2.spawn, r0.traffic2.marker, 1)
+      61: Game.SetTrafficSpeed(r0.traffic2, 1, 1)
+      62: return 
+      65: if (r1.Sender == r0.traffic2.trigger2) ~= 0 then skip
+      66: jmp 74
+      72: Game.SetTrafficSpeed(r0.traffic2, 30, 30)
+      73: return 
+      76: if (r1.Sender == r0.traffic3.trigger1) ~= 0 then skip
+      77: jmp 93
+      85: Game.SpawnCharacter(r0.traffic3, r0.traffic3.spawn, r0.marker1, 1)
+      91: Game.SetTrafficSpeed(r0.traffic3, 1, 1)
+      92: return 
+      95: if (r1.Sender == r0.traffic3.trigger2) ~= 0 then skip
+      96: jmp 104
+      102: Game.SetTrafficSpeed(r0.traffic3, 30, 30)
+      103: return 
+      106: if (r1.Sender == r0.traffic4.trigger1) ~= 0 then skip
+      107: jmp 123
+      115: Game.SpawnCharacter(r0.traffic4, r0.traffic4.spawn, r0.marker1, 1)
+      121: Game.SetTrafficSpeed(r0.traffic4, 1, 1)
+      122: return 
+      125: if (r1.Sender == r0.traffic4.trigger2) ~= 0 then skip
+      126: jmp 134
+      132: Game.SetTrafficSpeed(r0.traffic4, 20, 20)
+      133: return 
+      136: if (r1.Sender == r0.traffic4.trigger3) ~= 0 then skip
+      137: jmp 145
+      143: Game.SetTrafficSpeed(r0.traffic4, 1, 1)
+      144: return 
+      145: return 
+== stategraph_basicrace_racing_handler_triggerenter_22 owner=race_bin_07/7_7_4_drag msg=459EABF5 trans= #409
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 27
+      25: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.traffic1.marker, 40)
+      26: return 
+      29: if (r1.Sender == r0.traffic2.trigger1) ~= 0 then skip
+      30: jmp 41
+      39: Game.SpawnCharacter(r0.traffic2, r0.traffic2.spawn, r0.traffic2.marker, 20)
+      40: return 
+      43: if (r1.Sender == r0.traffic3.trigger1) ~= 0 then skip
+      44: jmp 55
+      53: Game.SpawnCharacter(r0.traffic3, r0.traffic3.spawn, r0.traffic3.marker, 25)
+      54: return 
+      55: return 
+== stategraph_basicrace_racing_handler_triggerenter_19 owner=race_bin_11/11_7_1_drag msg=459EABF5 trans= #475
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 33
+      25: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.traffic1.marker, 1)
+      31: Game.SetTrafficSpeed(r0.traffic1, 1, 1)
+      32: return 
+      35: if (r1.Sender == r0.traffic1.trigger2) ~= 0 then skip
+      36: jmp 44
+      42: Game.SetTrafficSpeed(r0.traffic1, 30, 30)
+      43: return 
+      46: if (r1.Sender == r0.traffic2.trigger1) ~= 0 then skip
+      47: jmp 64
+      56: Game.SpawnCharacter(r0.traffic2, r0.traffic2.spawn, r0.traffic2.marker, 1)
+      62: Game.SetTrafficSpeed(r0.traffic2, 1, 1)
+      63: return 
+      66: if (r1.Sender == r0.traffic2.trigger2) ~= 0 then skip
+      67: jmp 75
+      73: Game.SetTrafficSpeed(r0.traffic2, 40, 40)
+      74: return 
+      77: if (r1.Sender == r0.traffic2.trigger3) ~= 0 then skip
+      78: jmp 86
+      84: Game.SetTrafficSpeed(r0.traffic2, 1, 1)
+      85: return 
+      86: return 
+== stategraph_basicrace_racing_handler_triggerenter_17 owner=race_bin_09/9_7_1_drag msg=459EABF5 trans= #298
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      14: if (r1.Sender == r0.trigger1) ~= 0 then skip
+      15: jmp 24
+      22: Game.SpawnCharacter(r0.semicon, r0.spawn1, r0.marker1, 30)
+      23: return 
+      24: return 
+== stategraph_basicrace_racing_handler_triggerenter_21 owner=race_bin_06/7_7_1_r_drag msg=459EABF5 trans= #438
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 27
+      25: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.traffic1.marker, 30)
+      26: return 
+      29: if (r1.Sender == r0.traffic2.trigger1) ~= 0 then skip
+      30: jmp 41
+      39: Game.SpawnCharacter(r0.traffic2, r0.traffic2.spawn, r0.traffic2.marker, 25)
+      40: return 
+      42: if (r1.Sender == r0.trigger1) ~= 0 then skip
+      43: jmp 63
+      52: Game.SpawnCharacter(r0.traffic3, r0.traffic3.spawn, r0.traffic3.marker, 40)
+      61: Game.SpawnCharacter(r0.traffic5, r0.traffic5.spawn, r0.traffic5.marker, 30)
+      62: return 
+      63: return 
+== stategraph_basicrace_racing_handler_triggerenter_2 owner=cashgrab msg=459EABF5 trans=stategraph_basicrace_raceover #488
+      2: if (r1.Sender.CashReward == None) ~= 0 then skip
+      3: jmp 5
+      4: return 
+      8: r3 = Game.GetRacerIndex(r1.Element)
+      9: if (Game.GetRacerIndex(r1.Element) < 1) ~= 0 then skip
+      10: jmp 12
+      11: return 
+      16: jmp 54
+      20: if (r1.Sender == r0.CashRewards[(1 - 1)]) ~= 0 then skip
+      21: jmp 54
+      24: test r2.CashAvailable[(1 - 1)] ~= 0 -> skip ; r8=r2.CashAvailable[(1 - 1)]
+      25: jmp 53
+      32: Debug.Print('Cash bag '..(1 - 1)..' grabbed!')
+      37: Game.AwardCash(r1.Element, r0.CashRewards[(1 - 1)].CashReward)
+      40: r2.CashAvailable[(1 - 1)] = false
+      46: r2.RacerCashTotal[Game.GetRacerIndex(r1.Element)] = (r2.RacerCashTotal[Game.GetRacerIndex(r1.Element)] + r0.CashRewards[(1 - 1)].CashReward)
+      48: test r2.SuddenDeath ~= 0 -> skip ; r8=r2.SuddenDeath
+      49: jmp 53
+      52: ChangeState('raceover')
+      53: return 
+      54: FORLOOP A=4 B=255 C=473
+      55: return 
+== stategraph_basicrace_racing_handler_triggerenter_9 owner=16_1_0_partial_dday msg=459EABF5 trans= #285
+      2: if (r1.Sender == r0.call_from_mia) ~= 0 then skip
+      3: jmp 20
+      6: r3 = r1.Element:IsPlayer()
+      7: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      8: jmp 20
+      10: test r2.DoMiaCellCall ~= 0 -> skip ; r3=r2.DoMiaCellCall
+      11: jmp 20
+      13: r2['DoMiaCellCall'] = false
+      15: r2['WaitForCallLoad'] = true
+      18: ECellCall(10)
+      19: return 
+      20: return 
+== stategraph_basicrace_tutorial_handler_stateenter owner=basicrace msg=5E1AA4C2 trans=stategraph_basicrace_intro_message #219
+      1: test r0.DDayRace ~= 0 -> skip ; r3=r0.DDayRace
+      2: jmp 7
+      5: ChangeState('intro_message')
+      6: return 
+      9: Game.PlayTutorial()
+      10: return 
+== stategraph_basicrace_tutorial_handler_notifymoviefinished owner=basicrace msg=89BB36FE trans=stategraph_basicrace_intro_message #176
+      2: ChangeState('intro_message')
+      3: return 
+== stategraph_basicrace_racing_handler_triggerenter_8 owner=speedtrapjumprace msg=459EABF5 trans=stategraph_basicrace_raceover #382
+      1: test r0.SpeedTrapTrigger ~= 1 -> skip ; r3=r0.SpeedTrapTrigger
+      2: jmp 4
+      3: return 
+      6: if (r1.Sender == r0.SpeedTrapTrigger) ~= 1 then skip
+      7: jmp 9
+      8: return 
+      11: r3 = r1.Element:IsPlayer()
+      12: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      13: jmp 15
+      14: return 
+      18: r3 = Game.GetSimableSpeedKmh(r1.Element)
+      21: if (r0.SpeedTrapTrigger.TargetBronze <= Game.GetSimableSpeedKmh(r1.Element)) ~= 0 then skip
+      22: jmp 37
+      29: Game.NotifySpeedTrapTriggered(r0, r1.Sender, r1.Element, Game.GetSimableSpeedKmh(r1.Element))
+      33: Game.NotifyRaceFinished(r1.Element)
+      36: ChangeState('raceover')
+      37: return 
+== stategraph_basicrace_racing_handler_triggerenter_4 owner=speedtraprace msg=459EABF5 trans= #488
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      7: r3 = Game.GetRacerIndex(r1.Element)
+      8: if (Game.GetRacerIndex(r1.Element) < 1) ~= 0 then skip
+      9: jmp 11
+      10: return 
+      15: jmp 59
+      19: if (r1.Sender == r0.SpeedTrapList[(1 - 1)]) ~= 0 then skip
+      20: jmp 59
+      24: r8 = Game.GetSimableSpeedKmh(r1.Element)
+      26: if (r0.SpeedTrapList[(1 - 1)].ThreshholdSpeed <= Game.GetSimableSpeedKmh(r1.Element)) ~= 0 then skip
+      27: jmp 58
+      31: if (r2.TrapRecords[Game.GetRacerIndex(r1.Element)][(1 - 1)] < Game.GetSimableSpeedKmh(r1.Element)) ~= 0 then skip
+      32: jmp 58
+      36: r11 = r1.Element:IsPlayer()
+      37: test r1.Element:IsPlayer() ~= 0 -> skip ; r11=r1.Element:IsPlayer()
+      38: jmp 43
+      42: Game.HideTriggerIcon(r0.SpeedTrapList[(1 - 1)])
+      47: Game.AwardCash(r1.Element, (Game.GetSimableSpeedKmh(r1.Element) - r2.TrapRecords[Game.GetRacerIndex(r1.Element)][(1 - 1)]))
+      54: Game.NotifySpeedTrapTriggered(r0, r1.Sender, r1.Element, Game.GetSimableSpeedKmh(r1.Element))
+      57: r2.TrapRecords[Game.GetRacerIndex(r1.Element)][(1 - 1)] = Game.GetSimableSpeedKmh(r1.Element)
+      58: return 
+      59: FORLOOP A=4 B=255 C=467
+      60: return 
+== stategraph_basicrace_racing_handler_triggerenter_28 owner=race_bin_01/1_7_3_drag msg=459EABF5 trans= #379
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 26
+      24: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.finish_marker, 30)
+      25: return 
+      28: if (r1.Sender == r0.traffic1.trigger2) ~= 0 then skip
+      29: jmp 36
+      34: Game.SendCharacterStimulus(r0.traffic1, 'TRIGGER_ALL')
+      35: return 
+      36: return 
+== stategraph_basicrace_racing_handler_triggerenter_7 owner=race_bin_opm/20_1_2_maxcarload msg=459EABF5 trans= #325
+      2: r3 = r1.Element:IsPlayer()
+      3: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      4: jmp 6
+      5: return 
+      8: if (r1.Sender == r0.cop_trigger) ~= 0 then skip
+      9: jmp 29
+      13: Game.SetCopsEnabled(true)
+      20: Game.SpawnCop(r0.cop_marker1, 'copmidsize', false, false)
+      27: Game.SpawnCop(r0.cop_marker2, 'copmidsize', false, false)
+      28: return 
+      29: return 
+== stategraph_basicrace_racing_handler_triggerenter_6 owner=race_bin_opm/20_2_1_rival_race msg=459EABF5 trans= #591
+      3: r4 = r1.Element:IsPlayer()
+      4: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      5: jmp 12
+      7: if (r1.Sender == r0.ending_cinematic_trigger) ~= 0 then skip
+      8: jmp 11
+      10: r2['EnableCameraThing'] = false
+      11: return 
+      13: if (r1.Sender == r0.cop_trigger) ~= 0 then skip
+      14: jmp 34
+      18: Game.SetCopsEnabled(true)
+      25: Game.SpawnCop(r0.cop_spawn1, 'copmidsize', false, false)
+      32: Game.SpawnCop(r0.cop_spawn3, 'copmidsize', false, false)
+      33: return 
+      35: if (r1.Sender == r0.ending_cinematic_trigger) ~= 0 then skip
+      36: jmp 47
+      38: test r2.EnableCameraThing ~= 0 -> skip ; r4=r2.EnableCameraThing
+      39: jmp 47
+      41: r2['EnableCameraThing'] = false
+      46: ECinematicMoment('Cinematics', 'SprintFinish', 100)
+      48: if (r1.Sender == r0.cop_trigger2) ~= 0 then skip
+      49: jmp 62
+      53: Game.SetCopsEnabled(true)
+      60: Game.SpawnCop(r0.cop_spawn2, 'copmidsize', false, false)
+      61: return 
+      63: if (r1.Sender == r0.call_911_trigger) ~= 0 then skip
+      64: jmp 67
+      66: E911Call()
+      68: if (r1.Sender == r0.ko_trigger) ~= 0 then skip
+      69: jmp 75
+      73: Game.KnockoutRacer(r1.Element)
+      74: return 
+      75: return 
+== stategraph_basicrace_racing_handler_stateenter_3 owner=16_1_0_partial_dday msg=5E1AA4C2 trans= #222
+      1: r2['WaitForCallLoad'] = false
+      5: Game.KillTimer('dodisp')
+      10: Game.SetTimer('dodisp', 3)
+      11: return 
+== stategraph_basicrace_racing_handler_stateenter_2 owner=16_1_1_circuit msg=5E1AA4C2 trans= #130
+      0: return 
+== stategraph_basicrace_racing_handler_stateenter_5 owner=challengerace msg=5E1AA4C2 trans= #159
+      1: r2['HandleICEMessage'] = true
+      2: return 
+== stategraph_basicrace_racing_handler_stateenter_4 owner=16_2_2_sprint msg=5E1AA4C2 trans= #130
+      0: return 
+== stategraph_basicrace_racing_handler_stateenter owner=basicrace msg=5E1AA4C2 trans= #315
+      2: Game.StartRaceTimers()
+      4: r2['ShowTips'] = false
+      6: r2['ShowPauseMenu'] = false
+      8: r2['ShowPostRace'] = true
+      9: r2['RaceOverMessageDuration'] = 3
+      10: r2['OnlinePostRaceTime'] = 0.5
+      12: r2['PlayerBusted'] = false
+      14: test r2.OnlineRace ~= 0 -> skip ; r3=r2.OnlineRace
+      15: jmp 17
+      16: r2['RaceOverMessageDuration'] = 0.5
+      17: return 
+== stategraph_basicrace_racing_handler_perpescaped owner=challengerace msg=8CB52A16 trans=stategraph_basicrace_raceover #362
+      1: test r2.PlayerHasWon ~= 0 -> skip ; r3=r2.PlayerHasWon
+      2: jmp 4
+      3: return 
+      5: test r2.PassedMilestone ~= 0 -> skip ; r3=r2.PassedMilestone
+      6: jmp 18
+      10: Game.ChallengeComplete(r1.Perpetrator)
+      14: Game.NotifyRaceFinished(r1.Perpetrator)
+      17: ChangeState('raceover')
+      19: test r2.PassedMilestone ~= 1 -> skip ; r3=r2.PassedMilestone
+      20: jmp 30
+      22: r2['ShowTips'] = false
+      24: r2['ShowPostRace'] = false
+      26: r2['ShowPauseMenu'] = true
+      29: ChangeState('raceover')
+      30: return 
+== stategraph_basicrace_racing_handler_perpbusted owner=tollboothrace msg=CE28AB70 trans= #153
+      1: r2['PlayerBusted'] = true
+      2: return 
+== stategraph_basicrace_racing_handler_restartrace owner=basicrace msg=6CE66AA0 trans=stategraph_basicrace_prerace #201
+      3: RaceStatus:SetActivelyRacing(false)
+      6: ChangeState('prerace')
+      7: return 
+== stategraph_basicrace_racing_handler_perpescaped_2 owner=milestonerace msg=8CB52A16 trans=stategraph_basicrace_raceover #238
+      1: test r2.MilestonePassed ~= 0 -> skip ; r3=r2.MilestonePassed
+      2: jmp 10
+      6: Game.NotifyRaceFinished(r1.Perpetrator)
+      9: ChangeState('raceover')
+      10: return 
+== stategraph_basicrace_racing_handler_triggerenter_12 owner=16_2_3_sprint msg=459EABF5 trans= #441
+      2: r3 = r1.Element:IsPlayer()
+      3: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      4: jmp 6
+      5: return 
+      8: if (r1.Sender == r0.cop_spawn_trigger) ~= 0 then skip
+      9: jmp 29
+      13: Game.SetCopsEnabled(true)
+      20: Game.SpawnCop(r0.cop_spawn_1, 'copmidsize', false, false)
+      27: Game.SpawnCop(r0.cop_spawn_2, 'copmidsize', false, false)
+      28: return 
+      30: if (r1.Sender == r0.bail_pursuit) ~= 0 then skip
+      31: jmp 40
+      35: EBailPursuit(1, 1)
+      38: Game.NoNewPursuitsOrCops()
+      39: return 
+      41: if (r1.Sender == r0.trigger_911) ~= 0 then skip
+      42: jmp 46
+      44: E911Call()
+      45: return 
+      46: return 
+== stategraph_basicrace_racing_handler_triggerenter_11 owner=16_2_2_sprint msg=459EABF5 trans= #133
+      0: return 
+== stategraph_basicrace_racing_handler_triggerenter_15 owner=race_bin_03/3_7_3_drag msg=459EABF5 trans= #310
+      1: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      2: jmp 4
+      3: return 
+      5: r4 = r1.Element:IsPlayer()
+      6: test r1.Element:IsPlayer() ~= 1 -> skip ; r4=r1.Element:IsPlayer()
+      7: jmp 9
+      8: return 
+      10: if (r1.Sender == None) ~= 0 then skip
+      11: jmp 13
+      12: return 
+      15: if (r1.Sender == r0.traffic1.trigger1) ~= 0 then skip
+      16: jmp 27
+      25: Game.SpawnCharacter(r0.traffic1, r0.traffic1.spawn, r0.traffic1.marker, 20)
+      26: return 
+      27: return 
+== stategraph_basicrace_racing_handler_triggerenter_13 owner=basicrace msg=459EABF5 trans= #625
+      2: r3 = r1.Element:IsPlayer()
+      3: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      4: jmp 6
+      5: return 
+      7: test r1.Sender ~= 1 -> skip ; r3=r1.Sender
+      8: jmp 10
+      9: return 
+      11: if (r1.Sender.AutoSpawnTriggerType == None) ~= 0 then skip
+      12: jmp 14
+      13: return 
+      18: jmp 24
+      21: if (r2.AutoSpawnedTriggers[(1 - 1)] == r1.Sender) ~= 0 then skip
+      22: jmp 24
+      23: return 
+      24: FORLOOP A=4 B=255 C=505
+      27: r2['NumAutoSpawned'] = (r2.NumAutoSpawned + 1)
+      30: r2.AutoSpawnedTriggers[r2.NumAutoSpawned] = r1.Sender
+      32: if (r1.Sender.AutoSpawnTriggerType == 'cop') ~= 0 then skip
+      33: jmp 42
+      40: Game.SpawnCop(r1.Sender, r1.Sender.CopSpawnType, true, false)
+      41: return 
+      43: if (r1.Sender.AutoSpawnTriggerType == 'traffic') ~= 0 then skip
+      44: jmp 76
+      50: jmp 67
+      53: if (r0.RandomSpawnTriggers[(1 - 1)] == r1.Sender) ~= 0 then skip
+      54: jmp 67
+      60: r2['NextRandomSpawnIndex'] = (r2.NextRandomSpawnIndex + 1)
+      63: if (r2.NumRandomTraffic < r2.NextRandomSpawnIndex) ~= 0 then skip
+      64: jmp 68
+      65: r2['NextRandomSpawnIndex'] = 1
+      66: jmp 68
+      67: FORLOOP A=5 B=255 C=494
+      74: Game.SpawnCharacter(r2.RandomSpawnTrafficChars[r2.NextRandomSpawnIndex], r1.Sender, r1.Sender.TargetMarker, r1.Sender.InitialSpeed)
+      75: return 
+      76: return 
+== stategraph_basicrace_racing_handler_triggerenter_10 owner=16_2_1_d_day_intro msg=459EABF5 trans= #665
+      2: if (r1.Sender == r0.call_from_mia) ~= 0 then skip
+      3: jmp 23
+      5: test r2.DoMiaSMS ~= 0 -> skip ; r3=r2.DoMiaSMS
+      6: jmp 23
+      9: r3 = r1.Element:IsPlayer()
+      10: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      11: jmp 22
+      13: r2['DoMiaSMS'] = false
+      18: Game.SetTimer('backup', 15)
+      21: ECellCall(10)
+      22: return 
+      25: if (r1.Sender == r0.kill_engine) ~= 0 then skip
+      26: jmp 45
+      29: r3 = r1.Element:IsPlayer()
+      30: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      31: jmp 44
+      35: Game.KillTimer('backup')
+      41: r4 = Game.GetPlayerElement(0)
+      43: Game.SabotageEngine(Game.GetPlayerElement(0), 5)
+      44: return 
+      47: r3 = r1.Element:IsPlayer()
+      48: test r1.Element:IsPlayer() ~= 1 -> skip ; r3=r1.Element:IsPlayer()
+      49: jmp 51
+      50: return 
+      53: if (r1.Sender == r0.cop_spawn_trigger) ~= 0 then skip
+      54: jmp 74
+      58: Game.SetCopsEnabled(true)
+      65: Game.SpawnCop(r0.cop_spawn_1, 'copmidsize', false, false)
+      72: Game.SpawnCop(r0.cop_spawn_2, 'copmidsize', false, false)
+      73: return 
+      75: if (r1.Sender == r0.bail_trigger) ~= 0 then skip
+      76: jmp 87
+      78: EDispIntroRace()
+      82: EBailPursuit(1, 1)
+      85: Game.NoNewPursuitsOrCops()
+      86: return 
+      87: return 
+== stategraph_basicrace_racing_handler_stateexit_2 owner=16_1_0_partial_dday msg=9C020C14 trans= #189
+      3: Game.KillTimer('killrace')
+      7: Game.KillTimer('fade')
+      8: return 
+== stategraph_basicrace_racing_handler_stateexit owner=basicrace msg=9C020C14 trans= #129
+      0: return 
+== stategraph_basicrace_racing_handler_triggerenter owner=basicrace msg=459EABF5 trans=stategraph_basicrace_prerace #1661
+      8: r6 = function#0()
+      9: if (function#0() < 0) ~= 0 then skip
+      10: jmp 12
+      11: return 
+      15: if (r2.InRace[function#0()] == false) ~= 0 then skip
+      16: jmp 18
+      17: return 
+      20: r7 = r1.Element:IsPlayer()
+      21: test r1.Element:IsPlayer() ~= 0 -> skip ; r7=r1.Element:IsPlayer()
+      22: jmp 61
+      25: test r1.Sender.ResetsPlayer ~= 0 -> skip ; r7=r1.Sender.ResetsPlayer
+      26: jmp 61
+      30: test r2.OnlineRace ~= 0 -> skip ; r9=r2.OnlineRace
+      31: jmp 40
+      36: r9 = Game.PlayerIsLocal(r1.Element)
+      37: test Game.PlayerIsLocal(r1.Element) ~= 0 -> skip ; r9=Game.PlayerIsLocal(r1.Element)
+      38: jmp 40
+      43: Debug.Print('reset trigger')
+      44: test false ~= 0 -> skip ; r7=false
+      45: jmp 54
+      49: Debug.Print('jump to pre race')
+      52: ChangeState('prerace')
+      53: return 
+      54: test true ~= 0 -> skip ; r8=true
+      55: jmp 61
+      59: Game.WarpPlayerToTrigger(r2.racestart)
+      60: return 
+      63: r7 = function#1(function#0())
+      64: if (function#1(function#0()) == None) ~= 0 then skip
+      65: jmp 67
+      66: return 
+      68: if (r1.Sender == function#1(function#0())) ~= 1 then skip
+      69: jmp 74
+      72: if (r1.Sender.MasterCheckpoint == function#1(function#0())) ~= 0 then skip
+      73: jmp 259
+      77: if (r2.GoalList[function#0()] == r2.Checkpoint) ~= 0 then skip
+      78: jmp 94
+      87: Debug.Print('Racer '..function#0()..' crossing checkpoint '..r2.NextGoal[function#0()])
+      93: Game.NotifyCheckpointReached(r1.Element, r2.NextGoal[function#0()])
+      95: test function#1(function#0()).TimeBonus ~= 0 -> skip ; r8=function#1(function#0()).TimeBonus
+      96: jmp 110
+      99: r8 = r1.Element:IsPlayer()
+      100: test r1.Element:IsPlayer() ~= 0 -> skip ; r8=r1.Element:IsPlayer()
+      101: jmp 110
+      105: RaceStatus:AwardBonusTime(function#1(function#0()).TimeBonus)
+      109: HUD.ShowTimeExtension(function#1(function#0()).TimeBonus)
+      113: r9 = function#2(function#0())
+      114: r2.NextGoal[function#0()] = function#2(function#0())
+      117: r8 = function#1(function#0())
+      126: Debug.Print('Racer '..function#0()..' next goal is '..r2.NextGoal[function#0()])
+      133: Game.SetRacerGoal(function#0(), function#1(function#0()), r2.NextGoal[function#0()])
+      136: if (r1.Sender == r2.racefinish) ~= 1 then skip
+      137: jmp 139
+      140: test true ~= 0 -> skip ; r9=true
+      141: jmp 209
+      146: r2.LapsLeft[function#0()] = (r2.LapsLeft[function#0()] - 1)
+      156: Debug.Print('Racer '..function#0()..' crossing finish line, '..r2.LapsLeft[function#0()]..' laps left')
+      164: Game.NotifyLapFinished(r1.Element, (r2.NumLaps - r2.LapsLeft[function#0()]))
+      170: Game.SetRacerLapsLeft(function#0(), r2.LapsLeft[function#0()])
+      173: if (r2.LapsLeft[function#0()] == 0) ~= 1 then skip
+      174: jmp 176
+      177: test true ~= 0 -> skip ; r10=true
+      178: jmp 207
+      182: Debug.Print('Race over XXX')
+      185: r2['NumberFinished'] = (r2.NumberFinished + 1)
+      191: r12 = Game.CalculateRanking(r1.Element, r2.NumberFinished)
+      196: Game.NotifyRaceFinished(r1.Element)
+      202: Game.NotifyRacePlacement(r2, r1.Element, Game.CalculateRanking(r1.Element, r2.NumberFinished))
+      205: r2.InRace[function#0()] = false
+      206: return 
+      210: test r2.SharedCheckpoints ~= 0 -> skip ; r10=r2.SharedCheckpoints
+      211: jmp 249
+      212: test true ~= 1 -> skip ; r9=true
+      213: jmp 249
+      218: jmp 248
+      219: if ((1 - 1) == function#0()) ~= 1 then skip
+      220: jmp 248
+      223: test r2.InRace[(1 - 1)] ~= 0 -> skip ; r13=r2.InRace[(1 - 1)]
+      224: jmp 248
+      228: if (r2.GoalList[(1 - 1)] == r2.Checkpoint) ~= 0 then skip
+      229: jmp 248
+      236: Game.NotifyCheckpointReached(r2.Element[(1 - 1)], r2.NextGoal[function#0()])
+      243: Game.SetRacerGoal((1 - 1), function#1(function#0()), r2.NextGoal[function#0()])
+      247: r2.NextGoal[(1 - 1)] = r2.NextGoal[function#0()]
+      248: FORLOOP A=10 B=255 C=481
+      251: test r1.Sender.TokenValue ~= 0 -> skip ; r10=r1.Sender.TokenValue
+      252: jmp 259
+      258: Game.AwardCash(r1.Element, r1.Sender.TokenValue)
+      259: return 
+      function#0:
+        4: r0 = Game.GetRacerIndex(up0.Element)
+        5: return 
+        6: return 
+      function#1:
+        3: if (up0.NextGoal[r0] == 0) ~= 0 then skip
+        4: jmp 8
+        7: return up1.racefinish
+        15: return up0.GoalList[r0][up0.NextGoal[r0]]
+        16: return 
+      function#2:
+        6: if (up0.NextGoal[r0] < up0.GoalCount[r0]) ~= 0 then skip
+        7: jmp 13
+        12: return (up0.NextGoal[r0] + 1)
+        14: return 0
+        15: return 
+== stategraph_basicrace_racing_handler_stateexit_3 owner=16_2_1_d_day_intro msg=9C020C14 trans= #206
+      3: Game.KillTimer('eblown')
+      7: Game.KillTimer('bloweng')
+      11: Game.KillTimer('backup')
+      12: return 
+== stategraph_speedtrap_group_monitor_monitor_handler_triggerenter owner=speedtrap_group_monitor msg=459EABF5 trans= #505
+      2: test r1.Element ~= 1 -> skip ; r3=r1.Element
+      3: jmp 5
+      4: return 
+      6: r5 = r1.Element:IsPlayer()
+      7: test r1.Element:IsPlayer() ~= 1 -> skip ; r5=r1.Element:IsPlayer()
+      8: jmp 10
+      9: return 
+      10: test r1.Sender ~= 1 -> skip ; r4=r1.Sender
+      11: jmp 13
+      12: return 
+      14: test r1.Sender.ThreshholdSpeed ~= 1 -> skip ; r5=r1.Sender.ThreshholdSpeed
+      15: jmp 17
+      16: return 
+      20: r5 = Game.IsActiveSpeedTrap(r1.Sender)
+      21: test Game.IsActiveSpeedTrap(r1.Sender) ~= 1 -> skip ; r5=Game.IsActiveSpeedTrap(r1.Sender)
+      22: jmp 24
+      23: return 
+      27: r5 = Game.GetSimableSpeedKmh(r1.Element)
+      32: jmp 56
+      35: if (r1.Sender == r0.SpeedTrapList[(1 - 1)]) ~= 0 then skip
+      36: jmp 56
+      38: if (r0.SpeedTrapList[(1 - 1)].ThreshholdSpeed < Game.GetSimableSpeedKmh(r1.Element)) ~= 0 then skip
+      39: jmp 52
+      46: Game.NotifySpeedTrapTriggered(r0, r0.SpeedTrapList[(1 - 1)], r1.Element, Game.GetSimableSpeedKmh(r1.Element))
+      50: Game.AwardPlayerBounty(r0.SpeedTrapList[(1 - 1)].Bounty)
+      51: return 
+      55: HUD.ShowMessage('HUD_TOO_SLOW')
+      56: FORLOOP A=6 B=255 C=487
+      57: return 
+== stategraph_speedtrap_activity_initial_handler_stateenter owner=speedtrap_activity msg=5E1AA4C2 trans=stategraph_speedtrap_activity_monitor #247
+      1: r2['RecordThresh'] = r0.ThreshholdSpeed
+      4: r3 = Game.GetSimTime()
+      5: r2['EnableTime'] = Game.GetSimTime()
+      8: ChangeState('monitor')
+      9: return 
+== stategraph_race_bin_rival_unlocked_handler_stateenter_4 owner=race_bin_14 msg=5E1AA4C2 trans= #135
+      0: return 
+== stategraph_world_engage_initial_handler_stateenter owner=world_engage msg=5E1AA4C2 trans=stategraph_world_engage_wait #272
+      3: MiniMap.AddEngagedRace(r0.engagetrigger)
+      8: RaceStatus:AddAvailableEventToMap(r0.engagetrigger, r0.TargetActivity)
+      11: ChangeState('wait')
+      12: return 
+== stategraph_race_bin_rival_unlocked_handler_stateenter owner=race_bin msg=5E1AA4C2 trans=stategraph_race_bin_done #310
+      1: if (0 <= r0.SMSRivalChallenge) ~= 0 then skip
+      2: jmp 6
+      5: EAddSMS(r0.SMSRivalChallenge)
+      10: jmp 16
+      15: Game.UnlockRace(r0.BossRaces[(1 - 1)])
+      16: FORLOOP A=3 B=255 C=505
+      18: if (r2.NumRivalRaces == 0) ~= 0 then skip
+      19: jmp 23
+      22: ChangeState('done')
+      23: return 
+== stategraph_race_bin_rival_unlocked_handler_stateenter_2 owner=race_bin_15 msg=5E1AA4C2 trans= #136
+      0: return 
+== stategraph_race_bin_rival_unlocked_handler_stateenter_3 owner=race_bin_01 msg=5E1AA4C2 trans= #175
+      2: EAddSMS(93)
+      5: EAddSMS(94)
+      6: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_9 owner=race_bin_08 msg=122C89F1 trans= #272
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(59)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(60)
+      19: return 
+      20: return 
+== stategraph_race_bin_rival_unlocked_handler_notifyraceplacement owner=race_bin msg=122C89F1 trans=stategraph_race_bin_done #314
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      8: jmp 24
+      12: if (r1.Activity == r0.BossRaces[(1 - 1)]) ~= 0 then skip
+      13: jmp 24
+      16: r2['NumRivalRacesWon'] = (r2.NumRivalRacesWon + 1)
+      19: if (r2.NumRivalRacesWon == r2.NumRivalRaces) ~= 0 then skip
+      20: jmp 24
+      23: ChangeState('done')
+      24: FORLOOP A=3 B=255 C=495
+      25: return 
+== stategraph_speedtrap_challenge_engage_monitor_handler_notifyspeedtrap owner=speedtrap_challenge_engage msg=5F72B9E8 trans=stategraph_speedtrap_challenge_engage_disabled #424
+      3: Debug.Print('Speedtrap challenge engage activity handling speed trap notification')
+      10: jmp 25
+      14: if (r1.TrapActivity == r0.SpeedTrapsRequired[(1 - 1)]) ~= 0 then skip
+      15: jmp 19
+      18: r2.TrapDone[(1 - 1)] = true
+      22: if (r2.TrapDone[(1 - 1)] == false) ~= 0 then skip
+      23: jmp 25
+      25: FORLOOP A=4 B=255 C=496
+      26: test false ~= 0 -> skip ; r3=false
+      27: jmp 35
+      31: Activity.Run(r0.TargetActivity)
+      34: ChangeState('disabled')
+      35: return 
+== stategraph_speedtrap_group_monitor_initial_handler_stateenter owner=speedtrap_group_monitor msg=5E1AA4C2 trans=stategraph_speedtrap_group_monitor_monitor #227
+      0: r2['TrapCount'] = 0
+      2: test r0.SpeedTrapList ~= 0 -> skip ; r3=r0.SpeedTrapList
+      3: jmp 7
+      6: r2['TrapCount'] = r0.SpeedTrapList.Count
+      9: ChangeState('monitor')
+      10: return 
+== stategraph_world_engage_prompt_handler_triggerexit owner=world_engage msg=A72E4B1B trans=stategraph_world_engage_reset #233
+      2: r3 = r1.Element:IsPlayer()
+      3: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      4: jmp 12
+      7: if (r1.Sender == r0.disengagetrigger) ~= 0 then skip
+      8: jmp 12
+      11: ChangeState('reset')
+      12: return 
+== stategraph_world_engage_reset_handler_stateenter owner=world_engage msg=5E1AA4C2 trans=stategraph_world_engage_wait #159
+      2: ChangeState('wait')
+      3: return 
+== stategraph_world_engage_prompt_handler_stateexit owner=world_engage msg=9C020C14 trans= #190
+      3: Game.ExitEngagableTrigger(r0.TargetActivity)
+      4: return 
+== stategraph_world_engage_prompt_handler_acceptentercareerevent owner=world_engage msg=AF4C4648 trans=stategraph_world_engage_reset #210
+      3: Activity.Run(r0.TargetActivity)
+      6: ChangeState('reset')
+      7: return 
+== stategraph_world_engage_prompt_handler_stateenter owner=world_engage msg=5E1AA4C2 trans= #190
+      3: Game.EnterEngagableTrigger(r0.TargetActivity)
+      4: return 
+== stategraph_world_engage_prompt_handler_declineentercareerevent owner=world_engage msg=8870DE98 trans=stategraph_world_engage_reset #171
+      2: ChangeState('reset')
+      3: return 
+== stategraph_world_engage_wait_handler_triggerenter owner=world_engage msg=459EABF5 trans=stategraph_world_engage_prompt #287
+      2: r3 = r1.Element:IsPlayer()
+      3: test r1.Element:IsPlayer() ~= 0 -> skip ; r3=r1.Element:IsPlayer()
+      4: jmp 18
+      7: if (r1.Sender == r0.engagetrigger) ~= 0 then skip
+      8: jmp 18
+      12: r3 = Game.IsRaceUnlocked(r0.TargetActivity)
+      13: test Game.IsRaceUnlocked(r0.TargetActivity) ~= 0 -> skip ; r3=Game.IsRaceUnlocked(r0.TargetActivity)
+      14: jmp 18
+      17: ChangeState('prompt')
+      18: return 
+== stategraph_race_bin_unlock_races_handler_stateenter owner=race_bin msg=5E1AA4C2 trans=stategraph_race_bin_introduce_rival #540
+      3: Debug.Print('Unlocking races')
+      4: r2['NumRacesWon'] = 0
+      5: r2['PlayerBounty'] = 0
+      6: r2['NumChallengesPassed'] = 0
+      7: r2['NumWorldRaces'] = 0
+      8: r2['NumRivalRaces'] = 0
+      9: r2['NumRivalRacesWon'] = 0
+      11: if (r0.WorldRaces == None) ~= 1 then skip
+      12: jmp 16
+      15: r2['NumWorldRaces'] = r0.WorldRaces.Count
+      17: if (r0.BossRaces == None) ~= 1 then skip
+      18: jmp 22
+      21: r2['NumRivalRaces'] = r0.BossRaces.Count
+      23: test r0.engage ~= 0 -> skip ; r3=r0.engage
+      24: jmp 48
+      27: test r0.engage.RaceTriggers ~= 0 -> skip ; r3=r0.engage.RaceTriggers
+      28: jmp 48
+      36: jmp 47
+      41: test r0.engage.RaceTriggers[(1 - 1)].InitiallyUnlocked ~= 0 -> skip ; r8=r0.engage.RaceTriggers[(1 - 1)].InitiallyUnlocked
+      42: jmp 47
+      46: Game.UnlockRace(r0.engage.RaceTriggers[(1 - 1)].TargetActivity)
+      47: FORLOOP A=4 B=255 C=500
+      50: ChangeState('introduce_rival')
+      51: return 
+== stategraph_race_bin_rival_unlocked_handler_stateenter_5 owner=race_bin_13 msg=5E1AA4C2 trans= #135
+      0: return 
+== stategraph_race_bin_unlock_races_handler_stateenter_2 owner=race_bin_15 msg=5E1AA4C2 trans= #134
+      0: return 
+== stategraph_reputation_unlock_monitor_handler_notifyplayerrep owner=reputation_unlock msg=2F1DBF5A trans=stategraph_reputation_unlock_done #329
+      2: if (r0.ReputationRequired <= r1.RepPoints) ~= 0 then skip
+      3: jmp 26
+      5: if (r0.TargetActivities == None) ~= 1 then skip
+      6: jmp 19
+      12: jmp 18
+      17: Activity.Run(r0.TargetActivities[(1 - 1)])
+      18: FORLOOP A=3 B=255 C=505
+      22: ECellCall(1, 14)
+      25: ChangeState('done')
+      26: return 
+== stategraph_reputation_unlock_initial_handler_stateenter owner=reputation_unlock msg=5E1AA4C2 trans=stategraph_reputation_unlock_monitor #168
+      2: ChangeState('monitor')
+      3: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_7 owner=race_bin_10 msg=122C89F1 trans= #252
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 3) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(49)
+      13: return 
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_8 owner=race_bin_09 msg=122C89F1 trans= #275
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(53)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 5) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(55)
+      19: return 
+      20: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_6 owner=race_bin_11 msg=122C89F1 trans= #273
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(128)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(130)
+      19: return 
+      20: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_13 owner=race_bin_01 msg=122C89F1 trans= #277
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(90)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 6) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(91)
+      19: return 
+      20: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_14 owner=race_bin_06 msg=122C89F1 trans= #253
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 3) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(135)
+      13: return 
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_10 owner=race_bin_07 msg=122C89F1 trans= #328
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 1) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(66)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      15: jmp 24
+      19: Game.SetWorldHeat(1)
+      22: EAddSMS(65)
+      23: return 
+      24: if (Bin.GetNumRacesWon(r0.BinIndex) == 7) ~= 0 then skip
+      25: jmp 30
+      28: EAddSMS(134)
+      29: return 
+      30: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_11 owner=race_bin_03 msg=122C89F1 trans= #276
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(81)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(82)
+      19: return 
+      20: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_12 owner=race_bin_02 msg=122C89F1 trans= #289
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      9: jmp 18
+      13: Game.SetWorldHeat(5)
+      16: EAddSMS(86)
+      17: return 
+      18: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_4 owner=race_bin_13 msg=122C89F1 trans= #293
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 1) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(23)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(24)
+      19: return 
+      20: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      21: jmp 26
+      24: EAddSMS(31)
+      25: return 
+      26: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_5 owner=race_bin_12 msg=122C89F1 trans= #295
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 1) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(127)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(17)
+      19: return 
+      20: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      21: jmp 26
+      24: EAddSMS(40)
+      25: return 
+      26: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_15 owner=race_bin_04 msg=122C89F1 trans= #252
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 4) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(136)
+      13: return 
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_2 owner=race_bin_15 msg=122C89F1 trans= #249
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 1) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(123)
+      13: return 
+      14: return 
+== stategraph_race_bin_rival_locked_handler_notifyraceplacement_3 owner=race_bin_14 msg=122C89F1 trans= #270
+      1: if (1 < r1.Placing) ~= 0 then skip
+      2: jmp 4
+      3: return 
+      7: r3 = Bin.GetNumRacesWon(r0.BinIndex)
+      8: if (Bin.GetNumRacesWon(r0.BinIndex) == 1) ~= 0 then skip
+      9: jmp 14
+      12: EAddSMS(18)
+      13: return 
+      14: if (Bin.GetNumRacesWon(r0.BinIndex) == 2) ~= 0 then skip
+      15: jmp 20
+      18: EAddSMS(27)
+      19: return 
+      20: return 
+== stategraph_speedtrap_challenge_engage_initial_handler_stateenter owner=speedtrap_challenge_engage msg=5E1AA4C2 trans=stategraph_speedtrap_challenge_engage_monitor #250
+      1: r2['TrapDone'] = {}
+      7: jmp 11
+      10: r2.TrapDone[(1 - 1)] = false
+      11: FORLOOP A=3 B=255 C=507
+      14: ChangeState('monitor')
+      15: return 
+== stategraph_speedtrap_activity_reset_handler_stateenter owner=speedtrap_activity msg=5E1AA4C2 trans=stategraph_speedtrap_activity_monitor #167
+      2: ChangeState('monitor')
+      3: return 
+== stategraph_speedtrap_activity_monitor_handler_triggerenter owner=speedtrap_activity msg=459EABF5 trans=stategraph_speedtrap_activity_reset #645
+      2: if (r1.Sender == r0.SpeedTrapTrigger) ~= 0 then skip
+      3: jmp 67
+      6: r4 = r1.Element:IsPlayer()
+      7: test r1.Element:IsPlayer() ~= 0 -> skip ; r4=r1.Element:IsPlayer()
+      8: jmp 67
+      11: r4 = Game.GetSimTime()
+      13: if (r2.EnableTime <= Game.GetSimTime()) ~= 0 then skip
+      14: jmp 67
+      18: r5 = Game.GetSimableSpeedKmh(r1.Element)
+      20: if (r2.RecordThresh < Game.GetSimableSpeedKmh(r1.Element)) ~= 0 then skip
+      21: jmp 67
+      22: r2['RecordThresh'] = Game.GetSimableSpeedKmh(r1.Element)
+      25: r2['EnableTime'] = (Game.GetSimTime() + r0.ResetTime)
+      31: EDebugScreenMessage('Speed trap!', 3, -300, -20)
+      39: EDebugScreenMessage(Game.GetSimableSpeedKmh(r1.Element)..' km/h', 3, -300, 0)
+      45: Game.NotifySpeedTrapTriggered(r0, r1.Element, Game.GetSimableSpeedKmh(r1.Element))
+      50: Game.AwardPlayerBounty(r0.SpeedTrapTrigger.Bounty)
+      54: RaceStatus:AddSpeedTrapToMap(r0.SpeedTrapTrigger)
+      63: Debug.ShowScreenMessage('ST '..Game.GetSimableSpeedKmh(r1.Element)..'km/h '..r0.Bounty, 10)
+      66: ChangeState('reset')
+      67: return 

@@ -1,0 +1,96 @@
+SMS 10 | Mia | Oil slick. | Hey, there's somethin' wrong with your ride. You left a huge oil slick at the start line.^^You have to end the race fast.
+SMS 11 | Razor | To crack the Blacklist. | What's up poser?^^I'm glad you're puttin' it down out there - I really am, 'cause I can't wait to get a crack at that ride.^^What - didn't anybody tel
+SMS 12 | Rog | Hey night timer! | Well look what the underground let loose. Let's see how good you do in the daylight.
+SMS 13 | Rog | Nice run. | Good run. I like your style.^^Just make sure you watch your back with these guys, alright?^^See ya around.
+SMS 15 | Mia | I'll meet you there. | Hey, it's me.^^Check out your map. Head up to the location I told you about. I'll meet you there. Later.
+SMS 16 | Rog | People call me Rog. | I heard what happened. I told ya these guys were dirty. If you're an enemy of Razor's, you're a friend of mine.^^People call me Rog.^^I'll be seein' y
+SMS 17 | Razor | Thanks for the wheels! | It's your pal Razor.^^Heard you're back in; I hope you enjoyed your vacation. Maybe I should call you sweetheart now, huh? Glad to see you're a sucker
+SMS 18 | Rog | If you need parts... | Yo, it's Rog.^^If you need any parts or think you got enough for a new ride, head over to one of the shops. I told them you're a friend, so they shoul
+SMS 19 | Mia | About Razor... | Hey, what's up? It's Mia.^^Looks like Razor's keepin' tabs on you. I guess he never figured he'd see you again.^^I like the idea that he'll be lookin'
+SMS 20 | Rog | Sonny's lookin' for a run. | Hey man, that chump Sonny is lookin' for a run. He's still pretty fresh on the Blacklist, so now's your chance.^^Don't blow it.
+SMS 21 | Rog | The regs for racing the Blacklist members. | Listen closely 'cause I'm only goin' over this once.^^Whenever you go up against a ranked racer, the pink slips go up for grabs. Now if you win, you g
+SMS 22 | Rog | Some info you might need. | Nice run.^^Alright, here's the deal. Razor's left the borough. He's racin' in Rockport. To get to him, you've gotta go through the ranks of the Blackl
+SMS 23 | Rog | Pursuit milestone info. | Hey, I've got some news about those pursuit milestones. Apparently, these things are thrown out there by Blacklist racers. They're challenges to anyon
+SMS 24 | Vic | Stay out of my way and we're cool. | Yeah, it's Vic here.^^Keep your mouth shut and listen up. It don't matter to me what you got goin' on with the other guys. You just make sure you stay
+SMS 25 | Mia | Straight up. | Hey, it's me.^^Look, I'll be straight. I'm all for helpin' someone who's been cheated, but I gotta get somethin' outta this deal. You flush out the Bl
+SMS 26 | Mia | Inside scoop on the cops. | It's Mia.^^I got some inside info on the cops that might help out. You can lose the cops by ducking out in hiding spots. You just gotta make sure you'
+SMS 27 | Rog | Pursuit breakers. | Hey.^When you're being chased by the 5-0, take a look at your map, you'll see a bunch of icons. These are structures you can use to shake the cops off
+SMS 29 | Rog | You're buildin' hype. | Your wins have generated some hype and got the attention of Taz. He's the next Blacklist racer. Guy's nuts and a major heat score, so watch yourself. 
+SMS 30 | Rog | Taz didn't see that comin'. | I'm impressed. Taz underestimated you and paid the price. Make sure you never do the same.^^I'll hook up with you later.  
+SMS 31 | Mia | Camden Beach. | Hey, you're really holdin' it down out there.^^I can't believe how deep this thing goes. I can't wait to see what the set up is in Camden Beach. I hea
+SMS 32 | Vic | Making life interesting for ya. | Yeah, it's Vic.^^Looks like you can handle your ride.^^Let's just say I made a call and now the cops really want you bad. So, let's see how hot you ar
+SMS 33 | Rog | Mia's making some cash. | Hey, I've been diggin' around and it looks like that Mia chick is layin' a lot of cash on you. I don't like her.^^I also found out that she has a real
+SMS 35 | Rog | You wanna see the ocean? | Hey, it's Rog!^^Here's the deal. The next Blacklist racer holds the key to Camden Beach. Smoke 'm and the next borough is yours.^^I'll see if I can di
+SMS 36 | Rog | Vic's ready to race. | Alright, Vic's up. He's the meathead I was tellin' you about - Razor's knock around guy. He's callin' you out.^^Run 'm off the Blacklist. That should 
+SMS 37 | Mia | Nice job. | Hey, it's me.^^I heard you got into Camden Beach. Good work. Looks like that Rog guy is pullin' his weight.^^I hooked you up with another Safe House c
+SMS 38 | Mia | Cross has your file. | Hey, it's me.^^I heard that cop, Cross, is takin' a strong interest in you. He drives a Corvette C6, so watch for it.^^His Street Racin' Unit's on the
+SMS 40 | Mia | Stay on target. | Hey. I heard you were rollin' the streets.^^If Rockport is anything like this, you're gonna have a lot of worked rides to take out.^^I hear Razor's be
+SMS 41 | Rog | Izzy wants to go for it. | It's me.^^Looks like that Izzy chick wants to take you on. She's tellin' everybody she's gonna kick you back to Rosewood. I wouldn't let that stand fo
+SMS 42 | Rog | Nice job finishing Izzy. | Guess Izzy's racin' days are over.^^Keep burnin' 'em up.^^I'll catch you later.
+SMS 43 | Mia | Police chopper info. | Hey, you're really makin' a mark out there.^^I got some info' on that police chopper. If they're on you, just duck out under some cover. They may be f
+SMS 46 | Rog | Big Lou wants to lock a race. | Alright, Big Lou wants to lock in a race. He's waitin' for you to make a move.
+SMS 47 | Mia | Limited fly zones. | Hey, it's Mia.^^I just heard from some other racers that the chopper can't fly into certain areas. Something about restricted fly zones. One of them i
+SMS 48 | Razor | Things are gonna get rough. | Well, well, well looks like the hero boy is movin' up in the world, huh?^^Don't get too excited punk, you still ain't rollin' my streets. And if I hav
+SMS 49 | Rog | Someone's spreading rumors about you. | Hey, listen up. People are talkin'.^^Now, I know this ain't true, but they're sayin' you're workin' for the cops. Make sure you prove 'em wrong. I'll 
+SMS 50 | Mia | Stick to the plan. | Hey, it's me.^^There's been a lot of talk goin' around. Bottom line - this is a race to be the best, most notorious driver around. Don't forget that.^
+SMS 52 | Rog | Baron's dying to race you. | Alright, you got that Baron guy's attention. He's dying to race you.^^Don't wait.
+SMS 53 | Mia | Great run. | Hey, it's me.^^Great run. I'd love to see the look on Razor's face now.^^Keep it up. Rockport is just around the way.^^I gotta go - later.
+SMS 54 | Mia | Top 10. | Hey, you've cracked the top 10. I had no idea the set up on the coast went this deep.^^Keep up the good work. I'll be in touch.^^Later.
+SMS 55 | Earl | Whole lot of green. | Earl here - wassup?^^Didn't think it would be easy did ya?^^Let's see you hold it down after the word goes out that you're worth a whole lot of green.
+SMS 57 | Rog | #9 doesn't think he can take you. | #9's ready.^^He's heard all the hype and the word is he's not so sure he can take you. Jump him right away.^^He's the only guy stoppin' you from getti
+SMS 58 | Mia | Way to go! | It's Mia.^^Way to go. You're officially #9 on the Blacklist. Take a good look around... Rockport City. I hooked up another Safe House for you. It's ne
+SMS 59 | Razor | That Rog guy. | What's up, it's me.^^Yeah I know that Rog guy - he's watching your back. I'm just wonderin', you know, why's he doin' it.^^It's a little weird if you 
+SMS 60 | Rog | Razor's paying people off to take you down. | Hey, I just got word that Razor is paying guys off to take you out. I don't know how deep it goes, so watch yourself. Don't trust anyone until this bl
+SMS 61 | Mia | This Blacklist crew is organized. | It's Mia.^^Can you believe this? I never knew the Rockport set up was so tight. These racers have everything planned out. I rolled these streets for a
+SMS 63 | Rog | Jewels is ready to race. | Yo! You're up.^^Jewels is ready when you are. She may be a sweet girl but remember - take her out and you're #8 on the Blacklist.
+SMS 64 | Ronnie | Hey tough guy. | Yeah, it's Ronnie here. You think beatin' him was easy? Yeah, we'll see how easy it is when you run against me.
+SMS 65 | Mia | People aren't taking Razor's bribes. | Hey, it's Mia.^^I heard about Razor's bribes. No one's buyin' it. People are startin' to back off. On top of that, I got a contact with the city that 
+SMS 66 | Razor | It really is you against the world. | Hey sweetheart, it's Razor.^^In your push to get to me, you've smoked a lot of drivers that had nothin' to do with what happened to ya.^^Now I know yo
+SMS 69 | Rog | Kaze's a nut job. | I heard Kaze's puttin' the word out that she wants a run. That girl's a nut job.^^Get on her and take her out.
+SMS 70 | Mia | Real buzz goin'. | Hey man!^^You got a serious buzz goin'. I mean, people from all over the place are trackin' what's goin' on. Cops are goin' nuts.^^You have 5 Blacklis
+SMS 72 | Rog | Ming wants to roll. | Alright, you know the deal.^^Ming knows you got a lot of rep' behind you. He doesn't want to wait any longer to take you on. Get this run over with.
+SMS 73 | Rog | #6, how does it feel? | So, how does it feel? #6 on the Blacklist after comin' back from nothing. Who woulda thought. It's gotta feel good.^^Keep it up.
+SMS 74 | Vic | Free ride. | Yeah, it's Vic.^^Look, I don't know why, but you got a chance at a free ride. I'd take it if I was you.
+SMS 76 | Rog | Pencil neck. | This pencil neck is ready to go.^^Hook it up and smoke 'm.
+SMS 77 | Razor | #5 on the Blacklist. | Well, well, well, #5 on the Blacklist. Bravo.^^Don't get too worked up though, cuz you see, you've still got my guys to go through and I've got a feel
+SMS 79 | Rog | JV is popular, take him out. | Hey, #4 on the Blacklist is up. JV's a popular guy with the crowd, so take him out quick and move on.^^Don't let this hang over you too long.
+SMS 80 | Rog | Razor's runnin' scared. | #4 on the Blacklist. Sounds good doesn't it?^^You should also know that the word on the street is Razor's runnin' scared. Everyone knows what happened
+SMS 81 | Razor | NARC. | Hey, you know who this is.^^Seems that the races in the boroughs are gettin' busted before they start. I mean, the cops are all over the place. Now th
+SMS 82 | Mia | Stay on top of your game. | It's me.^^Look, I know you talked to Razor. Don't let him throw you off. He's just messin' with you. Stay on top of your game. You take care of the ra
+SMS 84 | Ronnie | I'm gonna wipe you all over the road. | Yeah, it's Ronnie. Look, I don't care what they say about ya. I'm gonna wipe ya all over the road!^^I'm ready when you are punk.
+SMS 85 | Mia | Cracked the top 3. | Hey, it's me.^^I see you cracked the top 3. And to think, you got outta jail with nothin' and clawed your way back to the top. Not bad. One more Black
+SMS 86 | Razor | Turning the tables. | Listen up punk. You know who this is, so shut your mouth and open your ears.^^Now you're either helpin' the cops or someone you're hangin' with is, an
+SMS 88 | Rog | Toru's waiting for you. | Alright, this is it. #2 on the Blacklist is up for grabs. Toru's waitin' for your call. Chump's drivin' a McLaren. Need I say more?^^Smoke 'm out fast
+SMS 89 | Rog | How does it feel? | How does it feel? It's been a long time comin'.^^I've said everything that needed sayin'. You know what you gotta do. You've come too far to let this 
+SMS 90 | Razor | You're sellin' us out. | I know what your game is punk. You're sellin' us out, big surprise. I don't know how but ya are. For that - you're gonna pay.^^You ain't never gonna g
+SMS 91 | Mia | You're nearly there. | Hey, your rep with the locals is outta control. You know Razor's gotta be sweatin'. You're nearly there.^^Later.
+SMS 93 | Rog | Race between you and Razor is locked. | Alright, that's it. It's done.^^Everybody is callin' for a race between you and Razor. There's no stoppin' the hype. The thing is locked. There's more
+SMS 94 | Razor | It's time! | It's time. Bring yourself and that pathetic ride of yours to the location on the map.^^Don't make me wait.
+SMS 95 | Cross | Make a deal. | Hey hot shot.^^Hey, thanks for helpin' us out. We've been able to pick up every Blacklist racer thanks to you.^^Now, I'll take that into consideration
+SMS 96 | Mia | Way out. | It's Mia. Look, don't hang up.^^You can't go back to any of the Safe Houses, Cross knows about them. Head over to the old bridge. The location is on y
+SMS 97 | Rog | Impounded. | Looks like you got the cops attention. This ride's got a lot of impound strikes against it. They're towin' it to the cop shop.^^You're gonna have to s
+SMS 98 | Rog | Busted. | Hey, you better listen up.^^Don't be gettin' busted. Every time they snag you - your ride gets tagged. 3 strikes and they impound your car. Gettin' it
+SMS 100 | Cross | No special treatment. | Hellooo.^^Hey, I hear you want to get personal. Now, I want you to know that you've been moved up in the world. Now, you and I have our own rules.^^An
+SMS 101 | Cross | Cuttin' you some slack. | I'm getting tired of cuttin' you slack. No more Mr. Nice Guy. I'm gonna pound you into the pavement. And, by the time I'm done with you and your ride,
+SMS 102 | Cross | Pin stripes. | Hey! Hey! Homies, look! Can you still say homie? I don't even know - I'm from old school. Hey look, how ya doin'?^^Looks like bein' a good driver does
+SMS 105 | Rog | Backroom markers. | Seems you found yourself a pass to the backroom of the shop. There you can find parts that haven't even hit the shelf. Sometimes they're parts that no
+SMS 110 | Earl | My Streets. | So you can run - ain't nothing.^^You may've stomped on those... college kids but out here, on this coast, we can hold our own. Competition is fierce a
+SMS 111 | Razor | Rip you up. | Looks like you made it back onto my streets.^^Don't get all excited 'cause it don't mean nothin'. The next Blacklist racers aren't gonna roll over as 
+SMS 120 | Rockport Police Department | Impound release notification. | The court review for your impounded vehicle has now been concluded.^^You'll be able to release your vehicle for a fee covering court processing, stora
+SMS 121 | Mia | Hurry up. | Where are you? Don't keep me waiting loser.
+SMS 122 | - | Released From Impound | Your car has been released from impound.
+SMS 123 | Rog | Working your way up the Blacklist. | Get to the top of the Blacklist & take Razor down. The Blacklist is reached from your Safe house & your in-game engage system. It keeps track of your 
+SMS 124 | Mia | Basic rules for evading the police. | The Rockport police are always looking for street racers. Here's some advice:^^DISTANCE - to escape, get some distance between you & the police. Until
+SMS 125 | Rog | New cars and parts. | Now that you've beat Sonny, the local shops are gonna help you out with parts and upgrades to your ride. There'll be new cars to buy too, if you're in
+SMS 126 | Rog | Taz put out the challenge. | Taz just sent me a list of the races and milestones that you need to beat to get a shot at his Blacklist position.^^Taz isn't new to this game so you'
+SMS 127 | Rog | Get more than one car. | The police track your car. To make it to the top of the Blacklist you gotta have a bunch of cars to drive.^^When the heat on one car is gettin' high, 
+SMS 128 | Rog | Use pursuit breakers wisely. | By now I'm thinkin' you're using the Pursuit Breakers to ditch the cops. Here's the deal on gettin' the most outta the Pursuit Breakers.^^Don't use 'e
+SMS 129 | Mia | Checkout the Rap Sheet. | Now that you have access to the Rap Sheet remember to check it out and see what info' the cops have on record. You can access the Rap Sheet from your 
+SMS 130 | Rog | Speedtrap race pointers. | Speedtrap racing is a little different than other types of races, gettin' across the finish line first doesn't determine the winner.^^The goal is to g
+SMS 132 | Mia | Getting  your heat down. | Pay attention to the heat of the car you're drivin', each car you own has its own heat level. The best way to keep the cops off your back is to make s
+SMS 133 | Rog | Tip on roadblocks. | Once your heat gets high enough the police start blocking the roads to try and stop you. Each roadblock will have its weak point. Some of the roadbloc
+SMS 134 | Rog | Earning extra cash. | If you're running a little low on cash, you can always go back to races you didn't complete when you were working your way up the Blacklist. Bring up 
+SMS 135 | Rog | Performance tuning might help. | You can't always run the same setup for every race if you're lookin' to edge ahead of the competition. Think about tuning the characteristics of your 
+SMS 136 | Rog | Next level of police. | You're attracting a lot of attention. Watch the heat level on the car you're driving.^^If you get to heat level 5 your day will suck.  This level of h
+SMS 137 | Rog | The regs for racing the Blacklist members. | Listen closely 'cause I'm only goin' over this once.^^Whenever you go up against a ranked racer, the pink slips go up for grabs. Now if you win, you g
+count 95

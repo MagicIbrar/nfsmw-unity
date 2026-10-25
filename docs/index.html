@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NFS Most Wanted Rebuild</title>
+<meta name="description" content="A from-scratch Unity rebuild of Need for Speed: Most Wanted (2005, PC) that runs on your own copy of the game.">
+<style>
+:root {
+  --bg: #0e0f11; --panel: #17191c; --panel2: #1f2226; --text: #e9e6df; --muted: #a39f96; --line: #2c3035;
+  --accent: #f2a03d; --accent2: #7fb7ff; --good: #7ccf8a; --warn: #e8c56a;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f6f4ef; --panel: #ffffff; --panel2: #f0ede6; --text: #1d1f22; --muted: #5d5a54; --line: #ddd8cd;
+          --accent: #c06a0c; --accent2: #2a64b8; --good: #2f8a43; --warn: #9a7410; }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--font); }
+a { color: var(--accent2); }
+code, pre { font-family: var(--mono); font-size: 0.9em; }
+code { background: var(--panel2); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--panel2); padding: 14px 16px; border-radius: 8px; overflow-x: auto; border: 1px solid var(--line); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+nav { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; gap: 18px; align-items: center; height: 54px; overflow-x: auto; white-space: nowrap; }
+nav .brand { font-weight: 700; color: var(--text); text-decoration: none; margin-right: auto; }
+nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+nav a:hover { color: var(--text); }
+header.hero { padding: 64px 0 36px; }
+.hero h1 { font-size: clamp(30px, 5vw, 52px); line-height: 1.08; margin: 0 0 16px; letter-spacing: -0.5px; }
+.hero h1 span { color: var(--accent); }
+.hero p.lede { font-size: 19px; color: var(--muted); max-width: 760px; margin: 0 0 22px; }
+.notice { border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+          border-radius: 10px; padding: 14px 18px; max-width: 760px; }
+.btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.btn { display: inline-block; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600;
+       border: 1px solid var(--line); color: var(--text); background: var(--panel); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #1a1205; }
+.hero-shot { margin-top: 34px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.hero-shot img { display: block; width: 100%; height: auto; }
+section { padding: 48px 0; border-top: 1px solid var(--line); }
+h2 { font-size: 28px; margin: 0 0 8px; }
+h3 { font-size: 18px; margin: 0 0 6px; }
+.sub { color: var(--muted); margin: 0 0 26px; max-width: 760px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.kpi b { display: block; font-size: 32px; color: var(--accent); line-height: 1.1; }
+.kpi span { color: var(--muted); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.card p, .card ul { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+.card ul { padding-left: 18px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.gallery figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.gallery img { display: block; width: 100%; height: auto; }
+.gallery figcaption { padding: 10px 14px; font-size: 14px; color: var(--muted); }
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: minmax(150px, 260px) 1fr 52px; gap: 12px; align-items: center; font-size: 14px; }
+.bar .track { height: 10px; background: var(--panel2); border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.bar .fill { height: 100%; background: var(--accent); }
+.bar .pct { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.bar .name { color: var(--text); }
+.bar .name small { color: var(--muted); }
+ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+ol.steps > li { counter-increment: s; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+                padding: 16px 18px 16px 58px; position: relative; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 18px; top: 15px; width: 26px; height: 26px;
+                        border-radius: 50%; background: var(--accent); color: #1a1205; font-weight: 700;
+                        display: grid; place-items: center; font-size: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; }
+.diagram svg { display: block; min-width: 760px; width: 100%; height: auto; }
+.diagram text { font-family: var(--font); fill: var(--text); }
+.diagram .muted { fill: var(--muted); }
+.diagram .box { fill: var(--panel2); stroke: var(--line); }
+.diagram .hot { fill: color-mix(in srgb, var(--accent) 18%, var(--panel2)); stroke: var(--accent); }
+.diagram .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+footer { padding: 36px 0 60px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+@media (max-width: 640px) { .bar { grid-template-columns: 1fr 52px; } .bar .track { grid-column: 1 / -1; grid-row: 2; } }
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#">NFS MW Rebuild</a>
+  <a href="#status">Status</a><a href="#features">Features</a><a href="#how">How it works</a>
+  <a href="#setup">Setup</a><a href="#modding">Modding</a><a href="#game">The game</a><a href="#legal">Legal</a>
+  <a href="https://github.com/MagicIbrar/nfsmw-unity">GitHub</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <h1>Need for Speed: Most Wanted (2005),<br><span>rebuilt in Unity</span></h1>
+  <p class="lede">A from-scratch rebuild of the PC game, written by reverse-engineering the original <code>speed.exe</code>
+  function by function. It runs on your own installed copy: Rockport, the cars, the menus, the career scripts, the
+  sounds and the cutscenes are read from your game folder while it plays.</p>
+  <div class="notice"><b>You need your own copy of the game.</b> This project contains no game content: no textures,
+  models, audio, music, video, data files or executable. It reads them from your installation at runtime and never
+  modifies them.</div>
+  <div class="btns">
+    <a class="btn primary" href="#setup">Set it up</a>
+    <a class="btn" href="https://github.com/MagicIbrar/nfsmw-unity">Source on GitHub</a>
+    <a class="btn" href="#status">What works</a>
+  </div>
+  <div class="hero-shot"><img src="img/prologue.jpg" alt="The prologue race against Razor in the BMW M3 GTR, running in the rebuild" width="960" height="540"></div>
+</div></header>
+
+<section id="status"><div class="wrap">
+  <h2>Status</h2>
+  <p class="sub">Coverage is measured against the original executable: every function in <code>speed.exe</code> is tied
+  to its original source file through the symbol table, then to the Unity code that ports it.</p>
+  <div class="kpis">
+    <div class="kpi"><b>98%</b><span>of the game's code ported (effective, by code size)</span></div>
+    <div class="kpi"><b>80%</b><span>ported function for function; the rest partial, nothing missing</span></div>
+    <div class="kpi"><b>2.35 MB</b><span>of game code in <code>speed.exe</code> v1.3, across 900+ original source files</span></div>
+    <div class="kpi"><b>9 + 55</b><span>automated play tests and screenshot-tour shots, run on every build</span></div>
+  </div>
+  <h3 style="margin-top:34px">By subsystem</h3>
+  <p class="sub" style="margin-bottom:14px">Effective share ported, largest subsystems first (size of the original code in brackets).</p>
+  <div class="bars" id="bars"></div>
+  <p class="sub" style="margin-top:18px">The remaining partial code is mostly memory management, file loading and debug
+  paths that Unity replaces, each accounted for function by function in the
+  <a href="https://github.com/MagicIbrar/nfsmw-unity/blob/main/NFSMW_RE/coverage/coverage.md">coverage report</a>.</p>
+</div></section>
+
+<section id="shots"><div class="wrap">
+  <h2>Screenshots</h2>
+  <p class="sub">The rebuild running on the original data. Everything you see is drawn from the game's own files.</p>
+  <div class="gallery">
+    <figure><img src="img/freeroam.jpg" alt="Free roam in Rockport in a VW Golf GTI" loading="lazy" width="960" height="540"><figcaption>Free roam in Rockport with the HUD, minimap and race markers</figcaption></figure>
+    <figure><img src="img/race.jpg" alt="A circuit race with AI opponents" loading="lazy" width="960" height="540"><figcaption>A Blacklist circuit race with AI opponents and live standings</figcaption></figure>
+    <figure><img src="img/pursuit.jpg" alt="A police pursuit with the pursuit board" loading="lazy" width="960" height="540"><figcaption>A police pursuit: heat, the busted/evade meter and cop counter</figcaption></figure>
+    <figure><img src="img/race-sheet.jpg" alt="The safehouse race sheet over the garage" loading="lazy" width="960" height="540"><figcaption>The safehouse race sheet on the original UI engine</figcaption></figure>
+    <figure><img src="img/car-lot.jpg" alt="The car lot showing a Chevrolet Cobalt SS" loading="lazy" width="960" height="540"><figcaption>The car lot, with the game's own showroom set</figcaption></figure>
+    <figure><img src="img/prologue.jpg" alt="The prologue race against Razor" loading="lazy" width="960" height="540"><figcaption>The prologue: a rolling start against Razor in the M3 GTR</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="features"><div class="wrap">
+  <h2>What it can do</h2>
+  <p class="sub">A playable offline game from the press-start screen to the top of the Blacklist.</p>
+  <div class="grid">
+    <div class="card"><h3>Career</h3><ul><li>The original career scripts (Lua) drive every race and story beat</li><li>All 16 Blacklist bins, boss races, rival flow, milestones and bounty</li><li>The prologue, story movies with subtitles, SMS and cell calls</li><li>Safehouse, car lot, impound and stable heat</li></ul></div>
+    <div class="card"><h3>Races</h3><ul><li>Circuit, sprint, lap knockout, tollbooth, speed trap and drag</li><li>The game's start grids, checkpoints and trigger volumes</li><li>AI racers on the original road network, catch-up and skill rules</li><li>Race intros, countdown, photo finish and results</li></ul></div>
+    <div class="card"><h3>Police</h3><ul><li>Heat levels, formations, roadblocks, spike strips and the helicopter</li><li>Pursuit breakers, hiding spots, cooldown and busted/evade</li><li>Cops chase AI racers too, as in the original</li><li>Dispatch and cop radio speech from the game's own scripts</li></ul></div>
+    <div class="card"><h3>Driving</h3><ul><li>The racer physics: engine, gearbox, tyres, aero and nitrous</li><li>Speedbreaker, damage, blown tyres and resets</li><li>Traffic, trucks with trailers and smashable props</li><li>Cutscene cars on the original animation tracks</li></ul></div>
+    <div class="card"><h3>World and graphics</h3><ul><li>All of Rockport, streamed section by section like the original</li><li>Ports of the game's shaders: car paint, reflections, road shadows, motion blur, sun and fog</li><li>Weather, rain and the time-of-day lighting</li><li>Car parts, levels of detail, body animation and flat tyres</li></ul></div>
+    <div class="card"><h3>Front end and HUD</h3><ul><li>The game's own UI engine (FEng) running its menu packages</li><li>Customization: parts, paint, vinyls, performance, cart</li><li>HUD, minimap, pursuit board, world map, rap sheet</li><li>Quick race, Challenge Series, options and controls</li></ul></div>
+    <div class="card"><h3>Audio</h3><ul><li>EA's sound-script interpreter (AEMS) running the original car sound programs</li><li>Engine synthesis, collisions, skids, wind, rain and thunder</li><li>The interactive pursuit music and the licensed soundtrack</li><li>Cutscene sound and the original mixer</li></ul></div>
+    <div class="card"><h3>Multiplayer</h3><ul><li>Two-player split-screen races</li><li>LAN races between PCs</li></ul></div>
+    <div class="card"><h3>Modding</h3><ul><li>Export textures to PNG and models to OBJ</li><li>Replacements load from a Mods folder</li><li>Your game files are never changed</li></ul></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <h2>How it works</h2>
+  <p class="sub">Nothing from the game is converted or shipped. The rebuild opens your game's files the way
+  <code>speed.exe</code> does and runs a re-implementation of the original code on top of Unity.</p>
+  <div class="diagram" role="img" aria-label="Your game folder is read at runtime by the Core readers, which feed the game systems running in Unity">
+    <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="muted"/></marker></defs>
+      <rect class="hot" x="10" y="60" width="210" height="130" rx="10"/>
+      <text x="115" y="92" text-anchor="middle" font-weight="700" font-size="15">Your game folder</text>
+      <text x="115" y="116" text-anchor="middle" class="muted" font-size="12">GLOBAL · TRACKS · CARS</text>
+      <text x="115" y="134" text-anchor="middle" class="muted" font-size="12">FRONTEND · SOUND · MOVIES</text>
+      <text x="115" y="160" text-anchor="middle" class="muted" font-size="12">read only, never changed</text>
+      <path class="arrow" d="M222 125 H282"/>
+      <rect class="box" x="285" y="40" width="250" height="170" rx="10"/>
+      <text x="410" y="68" text-anchor="middle" font-weight="700" font-size="15">Core (plain C#)</text>
+      <text x="410" y="94" text-anchor="middle" class="muted" font-size="12">chunk, compression and texture readers</text>
+      <text x="410" y="114" text-anchor="middle" class="muted" font-size="12">attribute database · Lua 5.0 VM</text>
+      <text x="410" y="134" text-anchor="middle" class="muted" font-size="12">sound-script VM · audio and video codecs</text>
+      <text x="410" y="154" text-anchor="middle" class="muted" font-size="12">road network · physics and AI maths</text>
+      <text x="410" y="182" text-anchor="middle" class="muted" font-size="12">also runs in the .NET test harness</text>
+      <path class="arrow" d="M537 125 H597"/>
+      <rect class="box" x="600" y="20" width="370" height="210" rx="10"/>
+      <text x="785" y="48" text-anchor="middle" font-weight="700" font-size="15">Runtime (Unity)</text>
+      <text x="700" y="80" text-anchor="middle" font-size="13">World streaming</text>
+      <text x="870" y="80" text-anchor="middle" font-size="13">Shaders</text>
+      <text x="700" y="110" text-anchor="middle" font-size="13">Cars and physics</text>
+      <text x="870" y="110" text-anchor="middle" font-size="13">AI and police</text>
+      <text x="700" y="140" text-anchor="middle" font-size="13">Career and races</text>
+      <text x="870" y="140" text-anchor="middle" font-size="13">Front end (FEng)</text>
+      <text x="700" y="170" text-anchor="middle" font-size="13">Audio and speech</text>
+      <text x="870" y="170" text-anchor="middle" font-size="13">Cameras and NIS</text>
+      <text x="785" y="208" text-anchor="middle" class="muted" font-size="12">each system cites the exe addresses it follows</text>
+    </svg>
+  </div>
+  <div class="grid" style="margin-top:18px">
+    <div class="card"><h3>Reverse engineering</h3><p>Each system was reversed from the v1.3 executable with Ghidra and a disassembler, cross-checked against a public decompilation project of the GameCube build where one exists. The PC code wins wherever they differ. Every ported function cites the address it follows.</p></div>
+    <div class="card"><h3>Faithful first</h3><p>The goal is 1:1 behaviour, even where the original looks rough. Where Unity replaces something (PhysX contacts, memory management), the exact deviation is written down in the specs.</p></div>
+    <div class="card"><h3>Tested on every build</h3><p>Play tests drive a career race, the Challenge Series, the prologue, split screen, LAN and the handling numbers. A screenshot tour then visits 55 menus and moments of the game.</p></div>
+  </div>
+</div></section>
+
+<section id="setup"><div class="wrap">
+  <h2>Set it up with your game</h2>
+  <p class="sub">You need Need for Speed: Most Wanted for PC, installed and patched to v1.3, plus Unity to build the rebuild.</p>
+  <ol class="steps">
+    <li><b>Install the game</b> from your own disc or download and apply the v1.3 patch. Note its folder: the one that contains <code>GLOBAL</code>, <code>TRACKS</code>, <code>CARS</code>, <code>FRONTEND</code> and <code>speed.exe</code>. The retail default is <code>C:\Program Files (x86)\EA GAMES\Need for Speed Most Wanted</code>.</li>
+    <li><b>Install the tools:</b> Unity <b>6000.4.2f1</b> from Unity Hub, Git, and the .NET 8 SDK if you want the mod tool.</li>
+    <li><b>Get the source:</b><pre>git clone https://github.com/MagicIbrar/nfsmw-unity.git</pre></li>
+    <li><b>Point it at your game.</b> Create <code>NFSMWUnity/gameroot.txt</code> containing your game folder, for example:<pre>D:\Games\Need for Speed Most Wanted</pre>
+      The rebuild looks in this order: <code>-gameRoot "&lt;folder&gt;"</code> on the command line, <code>gameroot.txt</code> next to the player (or next to <code>Assets</code> in the editor), the <code>NFSMW_ROOT</code> environment variable, then the retail default folder.</li>
+    <li><b>Run it in the editor:</b> open the <code>NFSMWUnity</code> folder in Unity Hub, open <code>Assets/Scenes/FreeRoam.unity</code> and press Play.</li>
+    <li><b>Or build a player:</b> menu <code>NFSMW &gt; Build Windows Player</code>. It goes to <code>NFSMWUnity/Build/NFSMWUnity</code>; put a <code>gameroot.txt</code> next to <code>NFSMWUnity.exe</code> and run it.</li>
+  </ol>
+  <h3 style="margin-top:28px">Controls</h3>
+  <table>
+    <tr><th>Keyboard</th><th>Action</th></tr>
+    <tr><td>W / Up, S / Down</td><td>Throttle, brake and reverse</td></tr>
+    <tr><td>A D / Left Right</td><td>Steer</td></tr>
+    <tr><td>Space</td><td>Handbrake</td></tr>
+    <tr><td>N or Left Ctrl</td><td>Nitrous</td></tr>
+    <tr><td>X</td><td>Speedbreaker</td></tr>
+    <tr><td>R</td><td>Reset the car</td></tr>
+    <tr><td>C / B</td><td>Change camera / look back</td></tr>
+    <tr><td>Enter / Esc</td><td>Accept and start events / pause, back, skip cutscenes</td></tr>
+  </table>
+  <p class="sub" style="margin-top:12px">Gamepads work too. Split screen and LAN are described in the
+  <a href="https://github.com/MagicIbrar/nfsmw-unity/blob/main/NFSMWUnity/README.md">project README</a>.</p>
+</div></section>
+
+<section id="modding"><div class="wrap">
+  <h2>Modding</h2>
+  <p class="sub">Replace any car, world, menu or HUD texture, and any model, without touching the game's files.</p>
+  <div class="grid">
+    <div class="card"><h3>1 · Export</h3><p>The mod tool decodes the game's textures to PNG and its models to OBJ (with materials), ready for any image editor or Blender.</p></div>
+    <div class="card"><h3>2 · Edit</h3><p>Repaint a texture at any size, or reshape a model. OBJ files open upright in Blender in the game's own coordinates.</p></div>
+    <div class="card"><h3>3 · Drop into Mods</h3><p><code>ModTool import</code> checks your file and puts it in the <code>Mods</code> folder. The rebuild loads it in place of the original; delete it to undo.</p></div>
+  </div>
+<pre>ModTool export-textures CARS/BMWM3GTRE46 C:\nfsmods\bmw
+ModTool import C:\nfsmods\bmw\CARTEXTURES\BMWM3GTRE46_BADGING.png --pack CARTEXTURES --from CARS/BMWM3GTRE46
+ModTool export-models CARS/GTI C:\nfsmods\gti GTI_KIT00_BODY_A
+ModTool import C:\nfsmods\gti\GTI_KIT00_BODY_A.obj --from CARS/GTI</pre>
+  <p class="sub">Naming rules, the coordinate frame and the limits are in
+  <a href="https://github.com/MagicIbrar/nfsmw-unity/blob/main/MODDING.md">MODDING.md</a>.
+  Please share mods as your own work only; do not redistribute the game's original files.</p>
+</div></section>
+
+<section id="game"><div class="wrap">
+  <h2>About the game</h2>
+  <p class="sub">Need for Speed: Most Wanted was developed by EA Black Box and published by Electronic Arts in November
+  2005, for PC, PlayStation 2, Xbox, GameCube and as a launch title for the Xbox 360.</p>
+  <div class="grid">
+    <div class="card"><h3>Rockport</h3><p>An open city of three boroughs (Rosewood, Camden Beach and Bayview), linked by highways and full of police, traffic and smashable pursuit breakers.</p></div>
+    <div class="card"><h3>The Blacklist</h3><p>Fifteen of the city's most wanted street racers. You start at the bottom after Razor takes your BMW M3 GTR, and climb by winning races, earning bounty and completing pursuit milestones before facing each rival.</p></div>
+    <div class="card"><h3>Pursuits</h3><p>The police are the heart of the game: heat rises from patrol cars to rhinos and the helicopter, with roadblocks and spike strips. Escape, find a hiding spot and survive the cooldown, or get busted and impounded.</p></div>
+    <div class="card"><h3>Modes</h3><p>Career, Quick Race (circuit, sprint, lap knockout, drag, tollbooth, speed trap) and the Challenge Series of pursuit and race challenges, plus split-screen and online/LAN play.</p></div>
+    <div class="card"><h3>Its look</h3><p>A golden, hazy colour grade, bloom and motion blur, with live-action cutscenes blended with 3D. The rebuild keeps those visuals exactly as the original draws them.</p></div>
+    <div class="card"><h3>This rebuild's target</h3><p>The PC version, executable v1.3 (<code>speed.exe</code>). Online play is out of scope; LAN is re-implemented.</p></div>
+  </div>
+</div></section>
+
+<section id="legal"><div class="wrap">
+  <h2>Legal and FAQ</h2>
+  <table>
+    <tr><th style="width:34%">Is any game content included?</th><td>No. The repository and the built player contain only this project's code, shaders and documentation. All textures, models, sounds, music, movies and data are read from your installed copy.</td></tr>
+    <tr><th>Do I need to own the game?</th><td>Yes. Without an installed copy of Need for Speed: Most Wanted (PC) the rebuild has nothing to load.</td></tr>
+    <tr><th>Does it change my game?</th><td>No. It only reads the game folder; mods live in a separate folder.</td></tr>
+    <tr><th>Who made it?</th><td>A non-commercial fan project for preservation and study, not affiliated with or endorsed by Electronic Arts.</td></tr>
+    <tr><th>Licence</th><td>The code is MIT licensed. Need for Speed and Need for Speed: Most Wanted are trademarks of Electronic Arts Inc.; the game and its content belong to their owners.</td></tr>
+    <tr><th>Can I contribute?</th><td>Yes, through pull requests on GitHub. Please never attach game files or content extracted from them.</td></tr>
+  </table>
+</div></section>
+
+<footer><div class="wrap">
+  NFS Most Wanted Rebuild · code under the MIT licence · not affiliated with Electronic Arts ·
+  <a href="https://github.com/MagicIbrar/nfsmw-unity">GitHub</a>
+</div></footer>
+
+<script>
+// Effective share ported per subsystem (NFSMW_RE/coverage/coverage.json, by original code size)
+const subsystems = [
+  ["Front end: menus and screens", 312, 98], ["Physics", 277, 100], ["Audio (EAX sound)", 240, 100],
+  ["World: streaming and rendering", 227, 98], ["AI", 213, 100], ["Gameplay and career", 153, 94],
+  ["Front end: data and career logic", 133, 99], ["World: collision, roads, triggers", 113, 100],
+  ["Animation and cutscenes", 99, 100], ["Cameras", 97, 99], ["Lua scripting", 87, 95], ["Speech", 82, 100],
+  ["HUD", 61, 94], ["Renderer core", 58, 100], ["UI engine (FEng)", 53, 100], ["Foundation libraries", 51, 99],
+  ["Simulation", 44, 88], ["Misc (game flow, rumble, easter eggs)", 38, 98], ["Input", 11, 100]];
+const bars = document.getElementById("bars");
+for (const [name, kb, pct] of subsystems) {
+  const row = document.createElement("div");
+  row.className = "bar";
+  row.innerHTML = `<div class="name">${name} <small>(${kb} KB)</small></div>` +
+    `<div class="track"><div class="fill" style="width:${pct}%"></div></div><div class="pct">${pct}%</div>`;
+  bars.appendChild(row);
+}
+</script>
+</body>
+</html>

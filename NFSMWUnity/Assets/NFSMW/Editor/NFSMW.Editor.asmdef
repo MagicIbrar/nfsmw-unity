@@ -1,0 +1,7 @@
+{
+    "name": "NFSMW.Editor",
+    "rootNamespace": "NfsMw.EditorTools",
+    "references": ["NFSMW.Runtime"],
+    "includePlatforms": ["Editor"],
+    "autoReferenced": true
+}

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- [ours] NFSMW mod tool: exports the game's textures/models to PNG/OBJ and installs replacements into the Mods folder.
+       Compiles the Unity-free Core by link, like ../Harness. Never writes into the game folder. See ../../MODDING.md. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>ModTool</AssemblyName>
+    <RootNamespace>NfsMw.ModTool</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../NFSMWUnity/Assets/NFSMW/Core/**/*.cs" Link="Core/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

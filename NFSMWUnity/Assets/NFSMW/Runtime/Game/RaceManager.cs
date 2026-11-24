@@ -819,11 +819,28 @@ namespace NfsMw.Game
                 if (!e.Finished) e.PctRaceComplete = Mathf.Clamp01(e.Progress / Mathf.Max(1f, RouteLength)) * 100f;
                 return;
             }
-            if (Driven) DriveGoalGuard(e, pos);   // the script owns the goals; only the port guard for missed triggers
+            bool jumped = e.HasLastPos && (pos - e.LastPos).sqrMagnitude > 60f * 60f;
+            if (Driven)
+            {
+                DriveGoalGuard(e, pos);   // the script owns the goals; only the port guard for missed triggers
+                // [ours] The script's finish TriggerEnter never arrives here (its GTrigger and our road route miss
+                // each other), leaving the race in `racing` forever. Cross the C# route's finish ourselves and run
+                // the same post-finish flow the script would have posted, so the career can advance.
+                if (!_done && e == _player && e.InRace && !jumped && _goals.Count > 0)
+                    foreach (var goal in _goals)
+                    {
+                        if (!goal.Finish || goal.Lap != e.LapsCompleted) continue;
+                        if (!(e.HasLastPos && goal.Trigger.Entered(e.LastPos, pos)) && e.RouteProgress <= goal.Progress + 60f) continue;
+                        Debug.Log($"NFSMW race: Drive: {e.Name} crossed finish (lap {goal.Lap + 1}/{_laps}); port fallback ends the race");
+                        NotifyLapFinished(e, e.LapsCompleted + 1);
+                        NotifyRaceFinished(e);
+                        if (!_done) { ShowRaceOverSummary(); EnterPostRaceFlow(); }
+                        break;
+                    }
+            }
             else if (e.InRace && _goals.Count > 0)
             {
                 var g = _goals[Mathf.Clamp(e.GoalIndex, 0, _goals.Count - 1)];
-                bool jumped = e.HasLastPos && (pos - e.LastPos).sqrMagnitude > 60f * 60f;
                 if (e.HasLastPos && !jumped && g.Trigger.Entered(e.LastPos, pos)) HitGoal(e);
                 else if (e.RouteProgress > g.Progress + 60f) HitGoal(e);
                 if (_done) return;

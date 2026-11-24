@@ -186,7 +186,7 @@ namespace NfsMw
             transform.localPosition = _homePos;
             transform.localRotation = _homeRot;
             if (_renderer) _renderer.enabled = true;
-            if (_box) _box.enabled = true;
+            if (_box) { _box.enabled = true; _box.isTrigger = AttachedType; }
             _virgin = true;
             _smacked = false;
             _offScreen = 0f;
@@ -248,6 +248,7 @@ namespace NfsMw
             _bodyPending = false;
             _rb = gameObject.AddComponent<Rigidbody>();
             if (!_rb) { _bodyPending = true; return; }
+            if (_box) _box.isTrigger = false;   // [ours] a broken-loose prop collides again
             _rb.mass = Mass;
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
             _rb.collisionDetectionMode = _simple ? CollisionDetectionMode.Discrete : CollisionDetectionMode.ContinuousDynamic;
@@ -300,6 +301,21 @@ namespace NfsMw
         }
 
         // ---- contacts: the trigger, Moment::React's break test and the impact stimuli ----
+
+        /// <summary>[ours] DETACH_FORCE props are immobile scenery until hit. Their collider is a trigger so
+        /// the car is not stopped by PhysX before Moment::React detaches the prop; ResolveBreak supplies the impulse.</summary>
+        bool AttachedType => !SimplePhysics && DetachForce > 0f && Mass > 1e-6f;
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (_gone || !_box || !_box.isTrigger) return;
+            var rb = other ? other.attachedRigidbody : null;
+            if (!rb || rb == _rb) return;
+            var center = transform.TransformPoint(_box.center);
+            var n = center - rb.worldCenterOfMass;
+            if (n.sqrMagnitude < 1e-6f) n = -rb.transform.forward; else n.Normalize();
+            Contact(rb, rb.linearVelocity, rb.worldCenterOfMass, n, false);
+        }
 
         /// <summary>A car hit it with this closing velocity (car velocity minus prop velocity) before the contact.</summary>
         public void Hit(PlayerCar car, Vector3 carVelocity, Rigidbody carBody)
